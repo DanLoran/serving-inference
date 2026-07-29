@@ -1,3 +1,4 @@
+import argparse
 import json
 import random
 from pathlib import Path
@@ -22,14 +23,15 @@ TOPICS = [
 
 OUTPUT_TOKEN_BUCKETS = [64, 128, 256, 512]
 
-def main(n=500, out_path="prompts/generated_prompts.jsonl"):
+def generate(n=500, out_path="prompts/generated_prompts.jsonl", seed=0):
+    rng = random.Random(seed)
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
 
     with open(out_path, "w") as f:
         for i in range(n):
-            topic = random.choice(TOPICS)
-            template = random.choice(TEMPLATES)
-            target_output_tokens = random.choice(OUTPUT_TOKEN_BUCKETS)
+            topic = rng.choice(TOPICS)
+            template = rng.choice(TEMPLATES)
+            target_output_tokens = rng.choice(OUTPUT_TOKEN_BUCKETS)
 
             prompt = template.format(topic=topic)
 
@@ -41,6 +43,16 @@ def main(n=500, out_path="prompts/generated_prompts.jsonl"):
             }
 
             f.write(json.dumps(row) + "\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate a deterministic inference workload.")
+    parser.add_argument("--num-prompts", type=int, default=500)
+    parser.add_argument("--output", default="prompts/generated_prompts.jsonl")
+    parser.add_argument("--seed", type=int, default=0)
+    args = parser.parse_args()
+    generate(args.num_prompts, args.output, args.seed)
+
 
 if __name__ == "__main__":
     main()
