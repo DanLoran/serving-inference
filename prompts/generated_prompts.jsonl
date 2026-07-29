@@ -1,0 +1,500 @@
+{"id": "prompt_000000", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000001", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000002", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000003", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000004", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000005", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000006", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000007", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000008", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000009", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000010", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000011", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000012", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000013", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000014", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000015", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000016", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000017", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000018", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000019", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000020", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000021", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000022", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000023", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000024", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000025", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000026", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000027", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000028", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000029", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000030", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000031", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000032", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000033", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000034", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000035", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000036", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000037", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000038", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000039", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000040", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000041", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000042", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000043", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000044", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000045", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000046", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000047", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000048", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000049", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000050", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000051", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000052", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000053", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000054", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000055", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000056", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000057", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000058", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000059", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000060", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000061", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000062", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000063", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000064", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000065", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000066", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000067", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000068", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000069", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000070", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000071", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000072", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000073", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000074", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000075", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000076", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000077", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000078", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000079", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000080", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000081", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000082", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000083", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000084", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000085", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000086", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000087", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000088", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000089", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000090", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000091", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000092", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000093", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000094", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000095", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000096", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000097", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000098", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000099", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000100", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000101", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000102", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000103", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000104", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000105", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000106", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000107", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000108", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000109", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000110", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000111", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000112", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000113", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000114", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000115", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000116", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000117", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000118", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000119", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000120", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000121", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000122", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000123", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000124", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000125", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000126", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000127", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000128", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000129", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000130", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000131", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000132", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000133", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000134", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000135", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000136", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000137", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000138", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000139", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000140", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000141", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000142", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000143", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000144", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000145", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000146", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000147", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000148", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000149", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000150", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000151", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000152", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000153", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000154", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000155", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000156", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000157", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000158", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000159", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000160", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000161", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000162", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000163", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000164", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000165", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000166", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000167", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000168", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000169", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000170", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000171", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000172", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000173", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000174", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000175", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000176", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000177", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000178", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000179", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000180", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000181", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000182", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000183", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000184", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000185", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000186", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000187", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000188", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000189", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000190", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000191", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000192", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000193", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000194", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000195", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000196", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000197", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000198", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000199", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000200", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000201", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000202", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000203", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000204", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000205", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000206", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000207", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000208", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000209", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000210", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000211", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000212", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000213", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000214", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000215", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000216", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000217", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000218", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000219", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000220", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000221", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000222", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000223", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000224", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000225", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000226", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000227", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000228", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000229", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000230", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000231", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000232", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000233", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000234", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000235", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000236", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000237", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000238", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000239", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000240", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000241", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000242", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000243", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000244", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000245", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000246", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000247", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000248", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000249", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000250", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000251", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000252", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000253", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000254", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000255", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000256", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000257", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000258", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000259", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000260", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000261", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000262", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000263", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000264", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000265", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000266", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000267", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000268", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000269", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000270", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000271", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000272", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000273", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000274", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000275", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000276", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000277", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000278", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000279", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000280", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000281", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000282", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000283", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000284", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000285", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000286", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000287", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000288", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000289", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000290", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000291", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000292", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000293", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000294", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000295", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000296", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000297", "prompt": "Write a short technical summary of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000298", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000299", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000300", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000301", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000302", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000303", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000304", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000305", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000306", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000307", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000308", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000309", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000310", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000311", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000312", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000313", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000314", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000315", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000316", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000317", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000318", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000319", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000320", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000321", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000322", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000323", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000324", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000325", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000326", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000327", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000328", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000329", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000330", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000331", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000332", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000333", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000334", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000335", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000336", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000337", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000338", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000339", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000340", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000341", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000342", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000343", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000344", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000345", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000346", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000347", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000348", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000349", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000350", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000351", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000352", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000353", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000354", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000355", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000356", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000357", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000358", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000359", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000360", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000361", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000362", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000363", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000364", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000365", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000366", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000367", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000368", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000369", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000370", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000371", "prompt": "Write a short technical summary of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000372", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000373", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000374", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000375", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000376", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000377", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000378", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000379", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000380", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000381", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000382", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000383", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000384", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000385", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000386", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000387", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000388", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000389", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000390", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000391", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000392", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000393", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000394", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000395", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000396", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000397", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000398", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000399", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000400", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000401", "prompt": "Write pseudocode for continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000402", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000403", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000404", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000405", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000406", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000407", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000408", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000409", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000410", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000411", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000412", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000413", "prompt": "Give three practical examples of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000414", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000415", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000416", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000417", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000418", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000419", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000420", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000421", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000422", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000423", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000424", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000425", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000426", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000427", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000428", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000429", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000430", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000431", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000432", "prompt": "Give three practical examples of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000433", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000434", "prompt": "Write a short technical summary of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000435", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000436", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000437", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000438", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000439", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000440", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000441", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000442", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000443", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000444", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000445", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000446", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000447", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000448", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000449", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000450", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000451", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000452", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000453", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000454", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000455", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000456", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000457", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000458", "prompt": "Explain continuous batching in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000459", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000460", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000461", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000462", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000463", "prompt": "Write pseudocode for request scheduling.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000464", "prompt": "Explain request scheduling in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000465", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000466", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000467", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000468", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000469", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000470", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000471", "prompt": "Write a short technical summary of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000472", "prompt": "Write pseudocode for GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000473", "prompt": "Give three practical examples of prefill versus decode.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000474", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000475", "prompt": "Give three practical examples of continuous batching.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000476", "prompt": "Write a short technical summary of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000477", "prompt": "Explain KV cache memory usage in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000478", "prompt": "Explain LLM inference latency in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000479", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000480", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000481", "prompt": "Write a short technical summary of CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000482", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000483", "prompt": "Explain CUDA shared memory in simple terms.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000484", "prompt": "Explain throughput versus latency tradeoffs in simple terms.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000485", "prompt": "Write pseudocode for throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000486", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000487", "prompt": "Write a short technical summary of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000488", "prompt": "Give three practical examples of LLM inference latency.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000489", "prompt": "Give three practical examples of KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000490", "prompt": "Explain GPU kernel launch overhead in simple terms.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000491", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000492", "prompt": "Explain prefill versus decode in simple terms.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000493", "prompt": "Give three practical examples of throughput versus latency tradeoffs.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000494", "prompt": "Write a short technical summary of request scheduling.", "category": "systems_inference", "target_output_tokens": 512}
+{"id": "prompt_000495", "prompt": "Give three practical examples of GPU kernel launch overhead.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000496", "prompt": "Write pseudocode for CUDA shared memory.", "category": "systems_inference", "target_output_tokens": 64}
+{"id": "prompt_000497", "prompt": "Write pseudocode for LLM inference latency.", "category": "systems_inference", "target_output_tokens": 128}
+{"id": "prompt_000498", "prompt": "Write pseudocode for KV cache memory usage.", "category": "systems_inference", "target_output_tokens": 256}
+{"id": "prompt_000499", "prompt": "Write pseudocode for prefill versus decode.", "category": "systems_inference", "target_output_tokens": 128}
