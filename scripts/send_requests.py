@@ -1,8 +1,9 @@
 """Benchmark an OpenAI-compatible completions endpoint.
 
-Raw request records are written as JSONL and an aggregate summary is written as
-JSON. Streaming mode measures TTFT and observed inter-chunk latency in addition
-to end-to-end latency and throughput.
+Versioned raw request records are written as JSONL and an aggregate summary is
+written as JSON. Streaming mode measures client-observed TTFT, approximate TPOT,
+and observed inter-chunk latency in addition to end-to-end latency and
+throughput.
 """
 
 import argparse
@@ -13,6 +14,9 @@ import time
 from pathlib import Path
 
 import aiohttp
+
+RESULT_SCHEMA_VERSION = "1.0"
+MAX_ERROR_BODY_CHARS = 4096
 
 
 def percentile(values, p):
@@ -41,12 +45,16 @@ def distribution(values):
     }
 
 
-async def read_stream(response, start):
+async def read_stream(response, clock=time.perf_counter):
     text_parts = []
-    token_count = None
+    usage = {}
     first_token_at = None
+    last_token_at = None
     previous_chunk_at = None
     inter_chunk_latencies = []
+    finish_reason = None
+    malformed_events = 0
+    text_event_count = 0
 
     while True:
         line = await response.content.readline()
@@ -61,28 +69,68 @@ async def read_stream(response, start):
         try:
             event = json.loads(data)
         except json.JSONDecodeError:
+            malformed_events += 1
             continue
 
-        usage = event.get("usage") or {}
-        if usage.get("completion_tokens") is not None:
-            token_count = usage["completion_tokens"]
+        event_usage = event.get("usage") or {}
+        if event_usage:
+            usage.update(event_usage)
 
         choices = event.get("choices") or []
-        chunk_text = choices[0].get("text", "") if choices else ""
+        choice = choices[0] if choices else {}
+        if choice.get("finish_reason") is not None:
+            finish_reason = choice["finish_reason"]
+        chunk_text = choice.get("text", "")
         if not chunk_text:
             continue
-        now = time.perf_counter()
+        now = clock()
         if first_token_at is None:
             first_token_at = now
         elif previous_chunk_at is not None:
             inter_chunk_latencies.append(now - previous_chunk_at)
         previous_chunk_at = now
+        last_token_at = now
+        text_event_count += 1
         text_parts.append(chunk_text)
 
-    return "".join(text_parts), token_count, first_token_at, inter_chunk_latencies
+    return {
+        "text": "".join(text_parts),
+        "usage": usage,
+        "first_text_at": first_token_at,
+        "last_text_at": last_token_at,
+        "text_event_count": text_event_count,
+        "inter_chunk_latencies": inter_chunk_latencies,
+        "finish_reason": finish_reason,
+        "malformed_events": malformed_events,
+    }
 
 
-async def send_one(session, args, row):
+def request_metadata(row, request_index, payload):
+    return {
+        "schema_version": RESULT_SCHEMA_VERSION,
+        "id": row.get("id"),
+        "request_index": request_index,
+        "workload": row.get("workload") or row.get("category"),
+        "prompt_tokens": row.get("prompt_tokens"),
+        "target_prompt_tokens": row.get("target_prompt_tokens"),
+        "target_output_tokens": payload["max_tokens"],
+    }
+
+
+def truncate_error_body(body):
+    if len(body) <= MAX_ERROR_BODY_CHARS:
+        return body, False
+    return body[:MAX_ERROR_BODY_CHARS], True
+
+
+async def send_one(
+    session,
+    args,
+    row,
+    request_index=None,
+    run_started=None,
+    clock=time.perf_counter,
+):
     payload = {
         "model": args.model,
         "prompt": row["prompt"],
@@ -93,47 +141,114 @@ async def send_one(session, args, row):
     if args.stream:
         payload["stream_options"] = {"include_usage": True}
 
-    start = time.perf_counter()
+    start = clock()
+    run_started = start if run_started is None else run_started
+    metadata = request_metadata(row, request_index, payload)
     try:
         async with session.post(args.url, json=payload) as response:
+            if response.status != 200:
+                error_body, truncated = truncate_error_body(await response.text())
+                ended = clock()
+                return {
+                    **metadata,
+                    "status": response.status,
+                    "started_offset_s": start - run_started,
+                    "ended_offset_s": ended - run_started,
+                    "latency_s": ended - start,
+                    "ttft_s": None,
+                    "approx_time_per_output_token_s": None,
+                    "observed_inter_chunk_latency_s": [],
+                    "output_tokens": None,
+                    "server_token_usage_present": False,
+                    "finish_reason": None,
+                    "error_body": error_body,
+                    "error_body_truncated": truncated,
+                }
+
             if args.stream:
-                response_text, output_tokens, first_at, inter_chunk = await read_stream(
-                    response, start
-                )
-                response_body = response_text
+                stream_result = await read_stream(response, clock=clock)
+                response_body = stream_result["text"]
+                usage = stream_result["usage"]
+                output_tokens = usage.get("completion_tokens")
+                prompt_tokens = usage.get("prompt_tokens")
+                first_at = stream_result["first_text_at"]
+                last_at = stream_result["last_text_at"]
+                inter_chunk = stream_result["inter_chunk_latencies"]
+                finish_reason = stream_result["finish_reason"]
+                malformed_events = stream_result["malformed_events"]
+                text_event_count = stream_result["text_event_count"]
             else:
                 raw_body = await response.text()
                 response_body = raw_body
+                usage = {}
                 output_tokens = None
+                prompt_tokens = None
                 first_at = None
+                last_at = None
                 inter_chunk = []
+                finish_reason = None
+                malformed_events = 0
+                text_event_count = 0
                 try:
                     parsed = json.loads(raw_body)
-                    output_tokens = (parsed.get("usage") or {}).get("completion_tokens")
+                    usage = parsed.get("usage") or {}
+                    output_tokens = usage.get("completion_tokens")
+                    prompt_tokens = usage.get("prompt_tokens")
+                    choices = parsed.get("choices") or []
+                    if choices:
+                        finish_reason = choices[0].get("finish_reason")
                 except json.JSONDecodeError:
                     pass
 
-            elapsed = time.perf_counter() - start
+            ended = clock()
+            elapsed = ended - start
             ttft = first_at - start if first_at is not None else None
-            tpot = None
-            if ttft is not None and output_tokens and output_tokens > 1:
-                tpot = (elapsed - ttft) / (output_tokens - 1)
-            return {
-                "id": row.get("id"),
+            approx_tpot = None
+            if (
+                first_at is not None
+                and last_at is not None
+                and text_event_count > 1
+                and output_tokens
+                and output_tokens > 1
+            ):
+                approx_tpot = (last_at - first_at) / (output_tokens - 1)
+            result = {
+                **metadata,
                 "status": response.status,
+                "started_offset_s": start - run_started,
+                "ended_offset_s": ended - run_started,
                 "latency_s": elapsed,
                 "ttft_s": ttft,
-                "time_per_output_token_s": tpot,
+                "approx_time_per_output_token_s": approx_tpot,
                 "observed_inter_chunk_latency_s": inter_chunk,
                 "output_tokens": output_tokens,
-                "target_output_tokens": payload["max_tokens"],
-                "response": response_body,
+                "prompt_tokens": (
+                    prompt_tokens
+                    if prompt_tokens is not None
+                    else metadata["prompt_tokens"]
+                ),
+                "server_token_usage_present": output_tokens is not None,
+                "finish_reason": finish_reason,
+                "stream_text_event_count": text_event_count if args.stream else None,
+                "malformed_stream_events": malformed_events if args.stream else None,
             }
+            if getattr(args, "store_response", False):
+                result["response"] = response_body
+            return result
     except Exception as error:
+        ended = clock()
         return {
-            "id": row.get("id"),
+            **metadata,
             "status": "error",
-            "latency_s": time.perf_counter() - start,
+            "started_offset_s": start - run_started,
+            "ended_offset_s": ended - run_started,
+            "latency_s": ended - start,
+            "ttft_s": None,
+            "approx_time_per_output_token_s": None,
+            "observed_inter_chunk_latency_s": [],
+            "output_tokens": None,
+            "server_token_usage_present": False,
+            "finish_reason": None,
             "error": "%s: %s" % (type(error).__name__, error),
         }
 
@@ -154,6 +269,8 @@ def build_summary(args, results, duration):
             "concurrency": args.concurrency,
             "stream": args.stream,
             "temperature": args.temperature,
+            "store_response": getattr(args, "store_response", False),
+            "result_schema_version": RESULT_SCHEMA_VERSION,
         },
         "counts": {
             "attempted": len(results),
@@ -166,8 +283,8 @@ def build_summary(args, results, duration):
         "output_token_throughput_per_s": output_tokens / duration if duration else None,
         "latency_s": distribution([result["latency_s"] for result in successful]),
         "ttft_s": distribution([result.get("ttft_s") for result in successful]),
-        "time_per_output_token_s": distribution(
-            [result.get("time_per_output_token_s") for result in successful]
+        "approx_time_per_output_token_s": distribution(
+            [result.get("approx_time_per_output_token_s") for result in successful]
         ),
         "observed_inter_chunk_latency_s": distribution(inter_chunk),
     }
@@ -190,12 +307,18 @@ async def run(args):
     async with aiohttp.ClientSession(connector=connector, timeout=timeout) as session:
         semaphore = asyncio.Semaphore(args.concurrency)
 
-        async def bounded_send(row):
+        async def bounded_send(request_index, row):
             async with semaphore:
-                return await send_one(session, args, row)
+                return await send_one(
+                    session,
+                    args,
+                    row,
+                    request_index=request_index,
+                    run_started=started,
+                )
 
         started = time.perf_counter()
-        tasks = [bounded_send(row) for row in prompts]
+        tasks = [bounded_send(index, row) for index, row in enumerate(prompts)]
         results = []
         with open(output_path, "w") as output_file:
             for task in asyncio.as_completed(tasks):
@@ -227,6 +350,11 @@ def parse_args():
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--timeout", type=float, default=300)
     parser.add_argument("--stream", action="store_true")
+    parser.add_argument(
+        "--store-response",
+        action="store_true",
+        help="Store full model responses in raw results (disabled by default).",
+    )
     return parser.parse_args()
 
 
