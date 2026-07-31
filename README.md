@@ -50,8 +50,21 @@ python3 generate_prompts.py --workload long_prefill
 python3 generate_prompts.py --verify
 ```
 
-Start vLLM separately, then copy and edit the example experiment. The model name
-must match a model served by the endpoint.
+Start vLLM separately with enough total context for the longest prompt plus its
+requested output. The checked-in workloads require 2,112 tokens, and use a
+2,200-token limit to leave a small margin:
+
+```bash
+vllm serve Qwen/Qwen2.5-0.5B-Instruct \
+  --host 127.0.0.1 \
+  --port 8000 \
+  --dtype half \
+  --gpu-memory-utilization 0.85 \
+  --max-model-len 2200
+```
+
+The model name must match the model and tokenizer recorded by the workload.
+Then copy and edit the example experiment.
 
 ```bash
 cp experiments/example.json experiments/my-experiment.json
