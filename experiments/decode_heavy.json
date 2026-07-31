@@ -1,0 +1,12 @@
+{
+  "name": "decode_heavy",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "tokenizer": "Qwen/Qwen2.5-0.5B-Instruct",
+  "seed": 20260729,
+  "request_count": 32,
+  "prompt_token_tolerance": 4,
+  "temperature": 0.0,
+  "buckets": [
+    {"name": "decode_heavy", "count": 32, "prompt_tokens": 128, "output_tokens": 512}
+  ]
+}

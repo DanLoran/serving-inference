@@ -1,0 +1,21 @@
+{
+  "generation_config": {
+    "buckets": [
+      {
+        "count": 32,
+        "name": "short",
+        "output_tokens": 64,
+        "prompt_tokens": 128
+      }
+    ],
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "name": "short",
+    "prompt_token_tolerance": 4,
+    "request_count": 32,
+    "seed": 20260729,
+    "temperature": 0.0,
+    "tokenizer": "Qwen/Qwen2.5-0.5B-Instruct"
+  },
+  "schema_version": "1.0",
+  "workload_sha256": "84ef57695dec42ee6a9a380a1c41f140694038e959ccc4970b5bd85acdde04a2"
+}
