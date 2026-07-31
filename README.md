@@ -10,7 +10,44 @@ latency, time to first token, and throughput.
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -r requirements.txt
-python3 generate_prompts.py --num-prompts 500 --seed 0
+python3 generate_prompts.py
+```
+
+The first generation downloads the configured tokenizer from Hugging Face.
+Workloads deliberately use raw completion prompts without a chat template so
+the token budget is unambiguous and matches the `/v1/completions` endpoint.
+
+## Named workloads
+
+Each workload is defined in `experiments/<name>.json`; generated requests and
+metadata are written to `prompts/<name>.jsonl` and
+`prompts/<name>.metadata.json`.
+
+| Workload | Requests | Prompt tokens | Maximum output tokens |
+| --- | ---: | ---: | ---: |
+| `short` | 32 | 128 | 64 |
+| `long_prefill` | 32 | 2,048 | 64 |
+| `decode_heavy` | 32 | 128 | 512 |
+| `mixed` | 32 | see below | see below |
+
+The mixed workload always contains 16 `short`, 8 `long_prefill`, and 8
+`decode_heavy` requests. The generator expands buckets in config order and then
+shuffles them with an isolated `random.Random` instance and the recorded seed,
+making bucket membership and request order stable for a given config.
+
+Every row records requested and actual prompt token counts. The generator uses
+the exact tokenizer named by `model` (the config values must match) and rejects
+a row outside `prompt_token_tolerance`, currently four tokens. This small bound
+accounts for tokenizer decode/re-encode normalization while actual counts remain
+recorded per request. The metadata sidecar
+preserves the full generation config and SHA-256 of the canonical JSONL bytes.
+
+Generate one workload or validate all checked-in artifacts without downloading
+a tokenizer:
+
+```bash
+python3 generate_prompts.py --workload long_prefill
+python3 generate_prompts.py --verify
 ```
 
 Start vLLM separately, then copy and edit the example experiment. The model name
@@ -81,6 +118,7 @@ These checks do not contact a model server:
 PYTHONPYCACHEPREFIX=/tmp/serving-inference-pycache python3 -m compileall -q .
 PYTHONPYCACHEPREFIX=/tmp/serving-inference-pycache python3 -m unittest discover -s tests
 python3 generate_prompts.py --help
+python3 generate_prompts.py --verify
 python3 scripts/send_requests.py --help
 python3 scripts/run_experiment.py --help
 ```
