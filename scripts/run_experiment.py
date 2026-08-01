@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 import send_requests
+import summarize_results
 from experiment_manifest import build_manifest, sanitize, utc_now, write_json
 
 
@@ -464,6 +465,7 @@ def run_experiment(
         {"completed_at_utc": utc_now(), "status": "completed"}
     )
     write_json(manifest_path, manifest)
+    summarize_results.write_csv(root)
     combined["manifest"] = manifest
     return combined
 
