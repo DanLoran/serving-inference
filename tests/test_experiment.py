@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
@@ -119,9 +120,19 @@ class ExperimentTest(unittest.TestCase):
                 calls.append(command)
                 return SimpleNamespace(returncode=7)
 
-            with self.assertRaisesRegex(RuntimeError, "exit code 7"):
-                run_experiment.run_experiment(config(), directory, runner)
+            manager = mock.Mock()
+            manager.summary = {"enabled": True}
+            with mock.patch.object(
+                run_experiment, "TelemetryManager", return_value=manager
+            ), self.assertRaisesRegex(RuntimeError, "exit code 7"):
+                run_experiment.run_experiment(
+                    {**config(), "telemetry": {"gpu": {"enabled": True}}},
+                    directory,
+                    runner,
+                )
             self.assertEqual(len(calls), 1)
+            manager.start.assert_called_once_with()
+            manager.stop.assert_called_once_with()
 
     def test_success_exit_with_failed_requests_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -135,6 +146,25 @@ class ExperimentTest(unittest.TestCase):
 
             with self.assertRaisesRegex(RuntimeError, "incomplete or failed"):
                 run_experiment.run_experiment(config(), directory, runner)
+
+    def test_telemetry_errors_do_not_invalidate_successful_client_results(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manager = mock.Mock()
+            manager.summary = {"enabled": False}
+            manager.start.side_effect = OSError("collector startup failed")
+            manager.stop.side_effect = OSError("collector cleanup failed")
+
+            def runner(command):
+                write_success(command)
+                return SimpleNamespace(returncode=0)
+
+            with mock.patch.object(
+                run_experiment, "TelemetryManager", return_value=manager
+            ):
+                result = run_experiment.run_experiment(config(), directory, runner)
+            self.assertEqual(result["manifest"]["experiment"]["status"], "completed")
+            self.assertIn("startup_error", result["telemetry"])
+            self.assertIn("cleanup_error", result["telemetry"])
 
     def test_resume_keeps_completed_raw_runs(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -201,6 +231,18 @@ class ExperimentTest(unittest.TestCase):
             path = Path(directory) / "config.json"
             path.write_text(json.dumps({**config(), "repeats": 0}), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "repeats"):
+                run_experiment.load_config(path)
+
+            path.write_text(
+                json.dumps(
+                    {
+                        **config(),
+                        "telemetry": {"vllm": {"enabled": True, "interval_s": 0}},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "telemetry.vllm.interval_s"):
                 run_experiment.load_config(path)
 
     def test_checked_in_example_is_valid_and_fits_workload(self):

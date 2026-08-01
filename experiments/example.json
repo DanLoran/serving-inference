@@ -19,6 +19,19 @@
       "--max-model-len", "2200"
     ]
   },
+  "telemetry": {
+    "gpu": {
+      "enabled": true,
+      "interval_s": 1.0,
+      "timeout_s": 5.0
+    },
+    "vllm": {
+      "enabled": true,
+      "url": "http://localhost:8000/metrics",
+      "interval_s": 1.0,
+      "timeout_s": 5.0
+    }
+  },
   "num_requests": 32,
   "concurrency": [1, 2, 4, 8, 12, 16, 24, 32],
   "warmups": 1,
