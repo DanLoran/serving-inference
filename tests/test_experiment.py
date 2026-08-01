@@ -16,6 +16,13 @@ def config():
         "prompts": "prompts/mixed.jsonl",
         "url": "http://localhost:8000/v1/completions",
         "model": "mock",
+        "model_metadata": {
+            "revision": "test",
+            "dtype": "half",
+            "quantization": None,
+            "max_model_len": 2200,
+        },
+        "server": {"discovery": "explicit", "launch_flags": []},
         "num_requests": 2,
         "concurrency": [1, 2, 4],
         "warmups": 1,
@@ -195,6 +202,18 @@ class ExperimentTest(unittest.TestCase):
             path.write_text(json.dumps({**config(), "repeats": 0}), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "repeats"):
                 run_experiment.load_config(path)
+
+    def test_checked_in_example_is_valid_and_fits_workload(self):
+        root = Path(__file__).resolve().parents[1]
+        example = run_experiment.load_config(root / "experiments" / "example.json")
+        prompts = root / example["prompts"]
+        rows = [
+            line
+            for line in prompts.read_text(encoding="utf-8").splitlines()
+            if line
+        ]
+        self.assertGreaterEqual(len(rows), example["num_requests"])
+        self.assertEqual(example["concurrency"][-1], 32)
 
 
 if __name__ == "__main__":
