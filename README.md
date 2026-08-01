@@ -71,9 +71,36 @@ cp experiments/example.json experiments/my-experiment.json
 python3 scripts/run_experiment.py --config experiments/my-experiment.json
 ```
 
-Each concurrency level writes raw JSONL and a JSON summary beneath a timestamped
+Each concurrency level writes raw JSONL and a JSON summary beneath a named
 directory in `results/experiments/`. The same directory contains `report.md` and
-a combined `summary.json`.
+a combined `summary.json`. The example runs one excluded warmup and three
+measured repeats at each concurrency in `[1, 2, 4, 8, 12, 16, 24, 32]`.
+
+The runner seed-shuffles concurrency levels separately within each warmup or
+measured round. This deterministic interleaving reduces ordering bias without
+allowing a measurement to precede its condition's warmup. Every run has its own
+raw JSONL and summary path. On resume, valid completed runs are kept
+byte-for-byte; a partial, corrupt, or failed required run stops with a clear
+error so evidence is never silently overwritten. The saved config must also
+match exactly. Warmups remain on disk for auditability but are excluded from the
+combined report.
+
+### Saturation and stopping criteria
+
+Treat saturation as demonstrated only when increasing concurrency for two
+successive tested levels improves median repeat output-token throughput by less
+than 5% while median repeat P99 latency rises by at least 20%. Run all configured
+levels through 32 even if an earlier point appears saturated; extend the sweep
+if throughput is still improving at the highest level. Inspect the individual
+repeat summaries as well as the aggregate, and rerun noisy conditions when
+repeat throughput differs by more than 10%.
+
+The example uses 200 requests per repeat, rather than 20, as a practical floor.
+P99 is a tail estimate and 200 observations still provide limited resolution;
+use 1,000 or more successful requests per condition for conclusions that depend
+on P99, and report the request count and repeat variability. A run with any
+failed request is invalid and is not included in the combined report or a
+saturation claim.
 
 ## Reproducibility manifest
 
