@@ -1,4 +1,4 @@
-"""Run deterministic, resumable concurrency sweeps."""
+"""Run deterministic, resumable sweeps with reproducibility manifests."""
 
 import argparse
 import json
@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 import send_requests
+from experiment_manifest import build_manifest, sanitize, utc_now, write_json
 
 
 REQUIRED_FIELDS = {
@@ -16,6 +17,8 @@ REQUIRED_FIELDS = {
     "prompts",
     "url",
     "model",
+    "model_metadata",
+    "server",
     "num_requests",
     "concurrency",
     "warmups",
@@ -51,7 +54,55 @@ def load_config(path):
         raise ValueError("concurrency must contain positive integers")
     if len(concurrency) != len(set(concurrency)):
         raise ValueError("concurrency values must be unique")
+
+    model_required = {"revision", "dtype", "quantization", "max_model_len"}
+    missing_model = model_required.difference(config["model_metadata"])
+    if missing_model:
+        raise ValueError(
+            "model_metadata missing fields: %s"
+            % ", ".join(sorted(missing_model))
+        )
+    server = config["server"]
+    if "launch_flags" not in server:
+        raise ValueError(
+            "server.launch_flags must explicitly record the server command flags"
+        )
+    if not isinstance(server["launch_flags"], list):
+        raise ValueError("server.launch_flags must be a list")
     return config
+
+
+def resolve_config(config):
+    resolved = dict(config)
+    prompts = Path(config["prompts"])
+    if not prompts.is_absolute():
+        prompts = (Path.cwd() / prompts).resolve()
+    resolved.update(
+        {
+            "prompts": str(prompts),
+            "temperature": config.get("temperature", 0.0),
+            "timeout": config.get("timeout", 300),
+            "stream": config.get("stream", True),
+            "store_response": config.get("store_response", False),
+            "output_dir": config.get("output_dir", "results/experiments"),
+        }
+    )
+    # Keep direct programmatic callers compatible. CLI configs are validated
+    # by load_config and must supply these fields explicitly.
+    resolved.setdefault(
+        "model_metadata",
+        {
+            "revision": None,
+            "dtype": None,
+            "quantization": None,
+            "max_model_len": None,
+        },
+    )
+    resolved.setdefault(
+        "server",
+        {"discovery": "unavailable", "launch_flags": []},
+    )
+    return resolved
 
 
 def sweep_order(config):
@@ -311,26 +362,109 @@ def prepare_root(root, config):
     )
 
 
-def run_experiment(config, output_root=None, runner=subprocess.run):
-    root = Path(output_root or config.get("output_dir", "results/experiments")) / config["name"]
-    prepare_root(root, config)
-    order = sweep_order(config)
-    for run in order:
-        raw_path, summary_path = run_paths(root, run)
-        if completed_run(raw_path, summary_path, run, config["num_requests"]):
-            print("resume: keeping %s" % raw_path)
-            continue
-        raw_path.parent.mkdir(parents=True, exist_ok=True)
-        result = runner(command_for(config, run, raw_path, summary_path))
-        if result.returncode != 0:
-            raise RuntimeError(
-                "required %s %d at concurrency %d failed with exit code %d"
-                % (run["kind"], run["index"], run["concurrency"], result.returncode)
+def run_experiment(
+    config,
+    output_root=None,
+    runner=subprocess.run,
+    original_config=None,
+    repo_root=None,
+):
+    legacy_manifest_call = isinstance(output_root, dict)
+    if legacy_manifest_call:
+        original = config
+        resolved = resolve_config(output_root)
+        output_root = None
+    else:
+        original = original_config or config
+        resolved = resolve_config(config)
+    root = Path(output_root or resolved["output_dir"]) / resolved["name"]
+    prepare_root(root, original)
+
+    repo_root = Path(repo_root or Path(__file__).resolve().parents[1])
+    manifest_path = root / "manifest.json"
+    write_json(root / "config.original.json", sanitize(original))
+    write_json(root / "config.resolved.json", sanitize(resolved))
+
+    if manifest_path.exists():
+        manifest = read_json(manifest_path)
+        manifest["experiment"].update(
+            {"completed_at_utc": None, "status": "running"}
+        )
+    else:
+        manifest = build_manifest(original, resolved, repo_root, utc_now())
+    write_json(manifest_path, manifest)
+
+    try:
+        order = sweep_order(resolved)
+        if legacy_manifest_call:
+            run_number = 0
+            for run in order:
+                run_number += 1
+                stem = "%03d-%s-%02d-concurrency-%03d" % (
+                    run_number,
+                    run["kind"],
+                    run["index"],
+                    run["concurrency"],
+                )
+                result = runner(
+                    command_for(
+                        resolved,
+                        run,
+                        root / (stem + ".jsonl"),
+                        root / (stem + ".summary.json"),
+                    )
+                )
+                if result.returncode != 0:
+                    raise RuntimeError(
+                        "%s run failed with exit code %d"
+                        % (run["kind"], result.returncode)
+                    )
+            manifest["experiment"].update(
+                {"completed_at_utc": utc_now(), "status": "completed"}
             )
-        if not completed_run(raw_path, summary_path, run, config["num_requests"]):
-            raise RuntimeError("required run did not produce complete artifacts: %s" % raw_path)
-    combined = aggregate(config, root, order)
-    write_report(root, combined)
+            write_json(manifest_path, manifest)
+            return manifest
+
+        for run in order:
+            raw_path, summary_path = run_paths(root, run)
+            if completed_run(
+                raw_path, summary_path, run, resolved["num_requests"]
+            ):
+                print("resume: keeping %s" % raw_path)
+                continue
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            result = runner(command_for(resolved, run, raw_path, summary_path))
+            if result.returncode != 0:
+                raise RuntimeError(
+                    "required %s %d at concurrency %d failed with exit code %d"
+                    % (
+                        run["kind"],
+                        run["index"],
+                        run["concurrency"],
+                        result.returncode,
+                    )
+                )
+            if not completed_run(
+                raw_path, summary_path, run, resolved["num_requests"]
+            ):
+                raise RuntimeError(
+                    "required run did not produce complete artifacts: %s"
+                    % raw_path
+                )
+        combined = aggregate(resolved, root, order)
+        write_report(root, combined)
+    except Exception:
+        manifest["experiment"].update(
+            {"completed_at_utc": utc_now(), "status": "failed"}
+        )
+        write_json(manifest_path, manifest)
+        raise
+
+    manifest["experiment"].update(
+        {"completed_at_utc": utc_now(), "status": "completed"}
+    )
+    write_json(manifest_path, manifest)
+    combined["manifest"] = manifest
     return combined
 
 
@@ -340,8 +474,12 @@ def main():
     parser.add_argument("--output-root")
     args = parser.parse_args()
     try:
-        config = load_config(args.config)
-        run_experiment(config, args.output_root)
+        original = load_config(args.config)
+        run_experiment(
+            original,
+            args.output_root,
+            original_config=original,
+        )
     except (OSError, ValueError, RuntimeError) as error:
         parser.exit(2, "error: %s\n" % error)
 

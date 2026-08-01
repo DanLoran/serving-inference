@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DanLoran/serving-inference/schemas/experiment-manifest.schema.json",
+  "title": "Serving inference experiment manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment", "config", "workload", "source", "environment", "serving"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "experiment": {
+      "type": "object",
+      "required": ["name", "started_at_utc", "completed_at_utc", "status", "warmups", "repeats"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "started_at_utc": {"type": "string"},
+        "completed_at_utc": {"type": ["string", "null"]},
+        "status": {"enum": ["running", "completed", "failed"]},
+        "warmups": {"type": "integer", "minimum": 0},
+        "repeats": {"type": "integer", "minimum": 1}
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": ["original", "resolved"],
+      "properties": {"original": {"type": "object"}, "resolved": {"type": "object"}}
+    },
+    "workload": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "source": {"type": "object", "required": ["git"]},
+    "environment": {"type": "object", "required": ["python", "system", "accelerator"]},
+    "serving": {"type": "object", "required": ["vllm", "model", "server"]}
+  }
+}

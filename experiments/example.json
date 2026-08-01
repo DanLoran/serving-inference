@@ -1,16 +1,70 @@
 {
-  "name": "rtx-2060-super-saturation",
-  "prompts": "prompts/mixed.jsonl",
-  "url": "http://localhost:8000/v1/completions",
-  "model": "Qwen/Qwen2.5-0.5B-Instruct",
-  "num_requests": 200,
-  "concurrency": [1, 2, 4, 8, 12, 16, 24, 32],
-  "warmups": 1,
-  "repeats": 3,
-  "seed": 20260729,
-  "stream": true,
-  "temperature": 0.0,
-  "timeout": 300,
-  "store_response": false,
-  "output_dir": "results/experiments"
+  "schema_version": "1.0",
+  "experiment": {
+    "name": "issue-3-manifest-smoke",
+    "started_at_utc": "2026-07-31T21:54:48.123713Z",
+    "completed_at_utc": "2026-07-31T21:54:49.178572Z",
+    "status": "completed",
+    "warmups": 1,
+    "repeats": 1
+  },
+  "source": {
+    "git": {
+      "available": true,
+      "dirty": false,
+      "revision": "fa7e793ea2f0ee3c75199a7ec8df8007dca9b432"
+    }
+  },
+  "workload": {
+    "path": "/home/daniel/Desktop/root-workspace/vllm-test/prompts/short.jsonl",
+    "sha256": "84ef57695dec42ee6a9a380a1c41f140694038e959ccc4970b5bd85acdde04a2"
+  },
+  "environment": {
+    "python": {
+      "implementation": "CPython",
+      "version": "3.12.13",
+      "dependencies": "[complete list in linked manifest]"
+    },
+    "system": {
+      "os": "Linux",
+      "release": "5.15.0-1108-gke",
+      "kernel": "#114-Ubuntu SMP Wed Jun 24 02:35:56 UTC 2026",
+      "machine": "x86_64"
+    },
+    "accelerator": {
+      "nvidia_smi_available": true,
+      "driver_version": "580.159.04",
+      "cuda_version": "13.0",
+      "gpus": [
+        {
+          "name": "NVIDIA GeForce RTX 2060 SUPER",
+          "vram_mib": 8192
+        }
+      ]
+    }
+  },
+  "serving": {
+    "model": {
+      "name": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "main",
+      "dtype": "half",
+      "quantization": null,
+      "max_model_len": 2200
+    },
+    "vllm": {
+      "installed": true,
+      "version": "0.21.0",
+      "fingerprint": "sha256:53ffc95b58984cd3caa568cd3274dc00198447c25891a206e05f663c8bc10e76"
+    },
+    "server": {
+      "discovery": "explicit",
+      "launch_flags": [
+        "--host", "127.0.0.1",
+        "--port", "8000",
+        "--dtype", "half",
+        "--gpu-memory-utilization", "0.85",
+        "--max-model-len", "2200"
+      ]
+    }
+  }
 }

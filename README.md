@@ -102,6 +102,29 @@ on P99, and report the request count and repeat variability. A run with any
 failed request is invalid and is not included in the combined report or a
 saturation claim.
 
+## Reproducibility manifest
+
+The experiment runner writes `config.original.json`, `config.resolved.json`,
+and a schema-versioned `manifest.json` before sending traffic. Its JSON Schema
+is checked in at `schemas/experiment-manifest.schema.json`. The manifest is
+updated with a UTC completion time and final status when the run finishes. It
+records the workload path and SHA-256, Git revision and dirty state, Python and
+installed dependency versions, OS/kernel, NVIDIA GPU/VRAM, driver and CUDA
+details when available, and the installed vLLM version and package fingerprint.
+Collection remains valid on CPU-only hosts or when NVIDIA tools are absent.
+
+Model revision, dtype, quantization, maximum model length, and server launch
+flags cannot be reliably discovered from a remote OpenAI-compatible endpoint.
+They are therefore required explicitly in `model_metadata` and `server` in the
+experiment config; see `experiments/example.json`. Keep `launch_flags` limited
+to non-secret command flags. Credential-shaped config fields and credentials in
+URLs are redacted, and the collector never snapshots environment variables.
+
+`config.original.json` preserves the supplied values (with secrets redacted),
+while `config.resolved.json` also contains defaults and the absolute workload
+path used for the run. Use a new experiment name or an empty output directory
+for every invocation so prior evidence is never overwritten.
+
 Raw records use a versioned schema and do not store model responses by default.
 Pass `--store-response` for debugging only; generated text can be large or
 sensitive.
