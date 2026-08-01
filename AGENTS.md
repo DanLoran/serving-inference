@@ -1,5 +1,3 @@
-GENTS.md
-
 ## Project purpose
 
 This repository contains reproducible client-side benchmarks for an OpenAI-compatible vLLM completions endpoint. Preserve experimental reproducibility, workload integrity, and clear separation between local validation and live inference testing.
@@ -54,6 +52,18 @@ Before committing:
   - model limits;
   - GPU or system capacity;
   - network or transport behavior.
+
+## Experiment framework
+
+The framework has three layers:
+
+1. `experiments/<workload>.json` defines deterministic request shapes. `generate_prompts.py` uses the configured model tokenizer and seed to create `prompts/<workload>.jsonl` plus a metadata sidecar containing the generation config and workload SHA-256.
+2. `scripts/send_requests.py` executes one condition at a fixed concurrency. It writes versioned per-request JSONL evidence and a summary containing latency, TTFT, approximate TPOT, and throughput metrics.
+3. `scripts/run_experiment.py` reads a sweep config such as `experiments/example.json`. It seed-shuffles concurrency levels within each round, runs excluded warmups before measured repeats, and gives every run a unique raw and summary path.
+
+The sweep runner is deliberately conservative. It resumes only when both artifacts describe a complete, all-successful run with the expected request count and concurrency. It never overwrites partial, corrupt, failed, or config-mismatched evidence. Warmups remain available for auditing but are excluded from combined metrics; every measured repeat and the exact sweep order are preserved in `summary.json`.
+
+Saturation analysis uses repeat-level medians. A candidate requires two successive concurrency increases with less than 5% additional output-token throughput and at least 20% higher P99 latency. This demonstrates a client-observed throughput plateau, not by itself full GPU saturation. A device-level claim also requires synchronized vLLM scheduler/queue metrics, GPU telemetry, several tested levels beyond the plateau, and elimination of client or network bottlenecks. Never invent or imply such a claim from local tests or an unexecuted sweep.
 
 ## Local validation
 
