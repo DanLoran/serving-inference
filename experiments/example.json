@@ -1,0 +1,16 @@
+{
+  "name": "rtx-2060-super-saturation",
+  "prompts": "prompts/mixed.jsonl",
+  "url": "http://localhost:8000/v1/completions",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "num_requests": 200,
+  "concurrency": [1, 2, 4, 8, 12, 16, 24, 32],
+  "warmups": 1,
+  "repeats": 3,
+  "seed": 20260729,
+  "stream": true,
+  "temperature": 0.0,
+  "timeout": 300,
+  "store_response": false,
+  "output_dir": "results/experiments"
+}
