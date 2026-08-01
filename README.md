@@ -87,6 +87,50 @@ error so evidence is never silently overwritten. The saved config must also
 match exactly. Warmups remain on disk for auditability but are excluded from the
 combined report.
 
+### GPU and vLLM telemetry
+
+The example enables timestamped GPU and vLLM telemetry. GPU collection invokes
+`nvidia-smi` once per interval and preserves one CSV row per device with GPU and
+memory utilization, used and total memory, power, temperature, and current SM
+and memory clocks. vLLM collection periodically fetches the configured
+Prometheus endpoint and preserves each complete text exposition response rather
+than depending on metric names from one vLLM release. This retains available
+running/waiting request, scheduler timing, KV-cache, and token counters across
+metric-name changes.
+
+Artifacts are written under `<experiment>/telemetry/`:
+
+- `gpu.csv` contains raw `nvidia-smi` values with a UTC timestamp and experiment
+  offset for every device sample.
+- `vllm.prometheus.jsonl` contains the complete raw Prometheus response for each
+  timestamped scrape.
+- `events.jsonl` marks telemetry start/stop and every benchmark command's start
+  and finish on the same monotonic experiment timeline.
+- `status.json` records collector availability, sample counts, errors, cleanup,
+  and the shared telemetry epoch.
+
+Both collectors are optional and independently configurable:
+
+```json
+"telemetry": {
+  "gpu": {"enabled": true, "interval_s": 1.0, "timeout_s": 5.0},
+  "vllm": {
+    "enabled": true,
+    "url": "http://localhost:8000/metrics",
+    "interval_s": 1.0,
+    "timeout_s": 5.0
+  }
+}
+```
+
+Omit `telemetry` or disable either collector when it is not needed. A missing
+`nvidia-smi`, unreachable metrics endpoint, malformed sample, or scrape timeout
+is recorded as telemetry unavailable and does not invalidate otherwise valid
+client results. Collectors are stopped after both successful and failed sweeps.
+Sampling is intentionally coarse; use `events.jsonl` to select samples whose
+offsets overlap the benchmark interval, and do not infer device saturation from
+client metrics alone.
+
 ### Saturation and stopping criteria
 
 Treat saturation as demonstrated only when increasing concurrency for two
