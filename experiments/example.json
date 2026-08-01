@@ -1,0 +1,32 @@
+{
+  "name": "rtx-2060-super-baseline",
+  "prompts": "prompts/mixed.jsonl",
+  "url": "http://localhost:8000/v1/completions",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_metadata": {
+    "revision": "main",
+    "dtype": "half",
+    "quantization": null,
+    "max_model_len": 2200
+  },
+  "server": {
+    "discovery": "explicit",
+    "launch_flags": [
+      "--host", "127.0.0.1",
+      "--port", "8000",
+      "--dtype", "half",
+      "--gpu-memory-utilization", "0.85",
+      "--max-model-len", "2200"
+    ]
+  },
+  "num_requests": 32,
+  "concurrency": [1, 2, 4, 8],
+  "warmups": 1,
+  "repeats": 3,
+  "seed": 20260729,
+  "stream": true,
+  "temperature": 0.0,
+  "timeout": 300,
+  "store_response": false,
+  "output_dir": "results/experiments"
+}
