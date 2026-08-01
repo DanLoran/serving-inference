@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -54,6 +55,13 @@ class FakeClock:
 
 
 class MetricsTest(unittest.TestCase):
+    def test_prompt_count_must_cover_requested_samples(self):
+        with tempfile.TemporaryDirectory() as directory:
+            prompts = Path(directory) / "prompts.jsonl"
+            prompts.write_text('{"prompt":"one"}\n', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "contains only 1 prompts"):
+                send_requests.load_prompts(prompts, 2)
+
     def test_percentile_interpolates(self):
         self.assertEqual(send_requests.percentile([1, 2, 3], 50), 2)
         self.assertEqual(send_requests.percentile([1, 3], 50), 2)

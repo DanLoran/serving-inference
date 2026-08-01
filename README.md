@@ -73,8 +73,10 @@ python3 scripts/run_experiment.py --config experiments/my-experiment.json
 
 Each concurrency level writes raw JSONL and a JSON summary beneath a named
 directory in `results/experiments/`. The same directory contains `report.md` and
-a combined `summary.json`. The example runs one excluded warmup and three
-measured repeats at each concurrency in `[1, 2, 4, 8, 12, 16, 24, 32]`.
+a combined `summary.json`. The example is a 32-request range-finding sweep with
+one excluded warmup and three measured repeats at each concurrency in
+`[1, 2, 4, 8, 12, 16, 24, 32]`. It verifies the experiment pipeline and locates
+a rough region of interest; it does not support a final tail-latency claim.
 
 The runner seed-shuffles concurrency levels separately within each warmup or
 measured round. This deterministic interleaving reduces ordering bias without
@@ -95,12 +97,15 @@ if throughput is still improving at the highest level. Inspect the individual
 repeat summaries as well as the aggregate, and rerun noisy conditions when
 repeat throughput differs by more than 10%.
 
-The example uses 200 requests per repeat, rather than 20, as a practical floor.
-P99 is a tail estimate and 200 observations still provide limited resolution;
-use 1,000 or more successful requests per condition for conclusions that depend
-on P99, and report the request count and repeat variability. A run with any
-failed request is invalid and is not included in the combined report or a
-saturation claim.
+The runner refuses to request more rows than the workload JSONL contains. For a
+measurement campaign, increase the workload definition's request count (and
+mixed bucket counts), regenerate and verify its JSONL and metadata, and then set
+the experiment's `num_requests` to the generated row count. P99 is a tail
+estimate; use 1,000 or more successful requests per condition for conclusions
+that depend on P99, and report the request count and repeat variability. The
+32-request example is not sufficient for that purpose. A run with any failed
+request is invalid and is not included in the combined report or a saturation
+claim.
 
 ## Reproducibility manifest
 

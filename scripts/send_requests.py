@@ -290,17 +290,26 @@ def build_summary(args, results, duration):
     }
 
 
+def load_prompts(path, num_requests):
+    with open(path) as prompt_file:
+        prompts = [json.loads(line) for line in prompt_file if line.strip()]
+    if not prompts:
+        raise ValueError("No prompts were loaded from %s" % path)
+    if len(prompts) < num_requests:
+        raise ValueError(
+            "Requested %d requests but %s contains only %d prompts"
+            % (num_requests, path, len(prompts))
+        )
+    return prompts[:num_requests]
+
+
 async def run(args):
     output_path = Path(args.output)
     summary_path = Path(args.summary or output_path.with_suffix(".summary.json"))
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(args.prompts) as prompt_file:
-        prompts = [json.loads(line) for line in prompt_file if line.strip()]
-    prompts = prompts[: args.num_requests]
-    if not prompts:
-        raise ValueError("No prompts were loaded from %s" % args.prompts)
+    prompts = load_prompts(args.prompts, args.num_requests)
 
     timeout = aiohttp.ClientTimeout(total=args.timeout)
     connector = aiohttp.TCPConnector(limit=args.concurrency)
