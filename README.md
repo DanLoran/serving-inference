@@ -73,7 +73,8 @@ python3 scripts/run_experiment.py --config experiments/my-experiment.json
 
 Each concurrency level writes raw JSONL and a JSON summary beneath a named
 directory in `results/experiments/`. The same directory contains `report.md` and
-a combined `summary.json`. The example is a 32-request range-finding sweep with
+a combined `summary.json`, plus an analysis-ready `summary.csv`. The example is
+a 32-request range-finding sweep with
 one excluded warmup and three measured repeats at each concurrency in
 `[1, 2, 4, 8, 12, 16, 24, 32]`. It verifies the experiment pipeline and locates
 a rough region of interest; it does not support a final tail-latency claim.
@@ -178,6 +179,31 @@ Raw records use a versioned schema and do not store model responses by default.
 Pass `--store-response` for debugging only; generated text can be large or
 sensitive.
 
+### Rebuildable CSV analysis
+
+`summary.csv` is generated exclusively from `manifest.json` and the measured
+repeat JSONL files; per-run and combined JSON summaries are not inputs. Rebuild
+it deterministically after copying or auditing an experiment:
+
+```bash
+python3 scripts/summarize_results.py results/experiments/my-experiment
+```
+
+Repeat rows are normalized by observed workload, concurrency, and repeat.
+Aggregate rows pool the raw observations across repeats, so their E2E, TTFT,
+and approximate-TPOT P50/P90/P99 values are recomputed rather than averaged
+from per-repeat percentiles. Aggregates also report sample standard deviation
+and normal-approximation 95% confidence intervals across repeat-level request
+goodput, output-token goodput, and failure rate. These intervals are blank for
+a single repeat.
+
+For mixed runs, each workload row uses the complete repeat wall-clock duration:
+requests overlap, so the raw client evidence cannot assign exclusive elapsed
+time to one workload. `schema_compatible`, `complete`, and `issues` explicitly
+flag unsupported row/manifest schemas, missing runs, malformed JSONL, request
+count mismatches, and unavailable metrics; affected evidence is never silently
+dropped.
+
 For one run:
 
 ```bash
@@ -233,6 +259,7 @@ python3 generate_prompts.py --help
 python3 generate_prompts.py --verify
 python3 scripts/send_requests.py --help
 python3 scripts/run_experiment.py --help
+python3 scripts/summarize_results.py --help
 ```
 
 Benchmark runs send traffic. Verify the endpoint and intended load before

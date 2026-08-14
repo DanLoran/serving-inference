@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 import send_requests
+import summarize_results
 from experiment_manifest import build_manifest, sanitize, utc_now, write_json
 from telemetry import TelemetryManager
 
@@ -542,6 +543,7 @@ def run_experiment(
     write_json(manifest_path, manifest)
     combined["telemetry"] = telemetry.summary
     write_report(root, combined)
+    summarize_results.write_csv(root)
     combined["manifest"] = manifest
     return combined
 
