@@ -160,6 +160,49 @@ flag unsupported row/manifest schemas, missing runs, malformed JSONL, request
 count mismatches, and unavailable metrics; affected evidence is never silently
 dropped.
 
+### Report-ready figures
+
+Generate publication-ready PNG and vector PDF figures from a completed
+experiment without contacting the benchmark server:
+
+```bash
+python3 scripts/plot_results.py results/experiments/my-experiment
+```
+
+The plotter rebuilds its client analysis directly from `manifest.json` and the
+measured repeat JSONL files; it does not trust a potentially stale summary. It
+writes deterministic names beneath `<experiment>/figures/`:
+
+- `throughput-<workload>.{png,pdf}` shows request, prompt-token,
+  output-token, and total-token goodput against concurrency.
+- `latency-<workload>.{png,pdf}` shows E2E, client-observed TTFT, and
+  approximate-TPOT P50/P90/P99 against concurrency.
+- `gpu-telemetry.{png,pdf}` shows GPU utilization and used memory against the
+  shared experiment offset when `telemetry/gpu.csv` is present.
+- `plot-manifest.json` records the source artifact paths and SHA-256 hashes,
+  generated filenames, metric definitions, and input diagnostics.
+
+Each workload gets separate figures. Lines show the mean repeat metric, small
+dots show individual measured repeats, and error bars are normal-approximation
+95% confidence intervals across repeat values. A single repeat has no CI. A red
+`x` at the plot floor marks an unavailable value rather than interpolating or
+replacing it. Incompatible manifest or raw-result schemas stop rendering;
+incomplete or missing metrics remain visible in `plot-manifest.json`.
+
+GPU plotting consumes the raw `nvidia-smi` CSV schema produced by the telemetry
+collector from issue #6. If that artifact is absent, client figures are still
+generated and the omission is recorded as a diagnostic. GPU sampling is coarse
+and cannot by itself prove device saturation. Raw Prometheus snapshots are
+preserved for future queue-depth or KV-cache analysis but are not normalized or
+plotted here because vLLM metric names vary by release.
+
+Choose formats or suppress GPU inspection explicitly when needed:
+
+```bash
+python3 scripts/plot_results.py results/experiments/my-experiment \
+  --formats png,svg --skip-gpu
+```
+
 For one run:
 
 ```bash
@@ -216,6 +259,7 @@ python3 generate_prompts.py --verify
 python3 scripts/send_requests.py --help
 python3 scripts/run_experiment.py --help
 python3 scripts/summarize_results.py --help
+python3 scripts/plot_results.py --help
 ```
 
 Benchmark runs send traffic. Verify the endpoint and intended load before
