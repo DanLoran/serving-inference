@@ -1,0 +1,41 @@
+{
+  "experiment": "rtx-2060-super-example",
+  "workload": "short",
+  "concurrency": 1,
+  "num_requests": 4,
+  "prompts": "prompts/short.jsonl",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "url": "http://127.0.0.1:8000/v1/completions",
+  "health_url": "http://127.0.0.1:8000/v1/models",
+  "temperature": 0.0,
+  "stream": true,
+  "startup_timeout_s": 180,
+  "request_timeout_s": 300,
+  "profiler_shutdown_timeout_s": 30,
+  "output_dir": "results/profiles",
+  "server_command": [
+    "vllm", "serve", "Qwen/Qwen2.5-0.5B-Instruct",
+    "--host", "127.0.0.1",
+    "--port", "8000",
+    "--dtype", "half",
+    "--gpu-memory-utilization", "0.85",
+    "--max-model-len", "2200"
+  ],
+  "nsys": {
+    "trace": [
+      "cuda",
+      "nvtx",
+      "osrt"
+    ],
+    "sample": "none",
+    "delay_s": 0,
+    "duration_s": 120
+  },
+  "ncu": {
+    "set": "basic",
+    "replay_mode": "kernel",
+    "kernel_name": "regex:.*(flash|paged_attention|gemm|cutlass).*",
+    "launch_skip": 0,
+    "launch_count": 1
+  }
+}

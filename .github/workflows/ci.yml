@@ -17,5 +17,7 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - run: python -m compileall -q .
       - run: python -m unittest discover -s tests
+      - run: bash -n scripts/profile_nsys.sh scripts/profile_ncu.sh
+      - run: shellcheck scripts/profile_nsys.sh scripts/profile_ncu.sh
       - run: python generate_prompts.py --verify
       - run: python scripts/run_experiment.py --help

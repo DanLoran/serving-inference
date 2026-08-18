@@ -132,6 +132,26 @@ Sampling is intentionally coarse; use `events.jsonl` to select samples whose
 offsets overlap the benchmark interval, and do not infer device saturation from
 client metrics alone.
 
+### Nsight profiling
+
+Bounded Nsight Systems and Nsight Compute workflows are available for targeted
+server-side investigation. Both workflows launch the vLLM server under the
+profiler and run the HTTP workload as a separate, unprofiled client process:
+
+```bash
+scripts/profile_nsys.sh --config profiling/example.json --dry-run
+scripts/profile_ncu.sh --config profiling/example.json --dry-run
+```
+
+Remove `--dry-run` only after checking the printed server and workload commands,
+the idle server port, the selected workload, and the output directory. Generated
+reports and a metadata manifest are written under `results/profiles/` with names
+that include the experiment, workload, concurrency, and profiler.
+
+See [docs/profiling.md](docs/profiling.md) for configuration, capture bounds,
+counter-permission troubleshooting, cleanup behavior, and the required warning
+against direct profiled/unprofiled latency comparisons.
+
 ### Saturation and stopping criteria
 
 Treat saturation as demonstrated only when increasing concurrency for two
