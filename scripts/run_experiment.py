@@ -11,6 +11,7 @@ from pathlib import Path
 import send_requests
 import summarize_results
 from experiment_manifest import build_manifest, sanitize, utc_now, write_json
+from telemetry import TelemetryManager
 
 
 REQUIRED_FIELDS = {
@@ -70,7 +71,32 @@ def load_config(path):
         )
     if not isinstance(server["launch_flags"], list):
         raise ValueError("server.launch_flags must be a list")
+    validate_telemetry(config.get("telemetry", {}))
     return config
+
+
+def validate_telemetry(telemetry):
+    if not isinstance(telemetry, dict):
+        raise ValueError("telemetry must be an object")
+    for name in ("gpu", "vllm"):
+        collector = telemetry.get(name, {})
+        if not isinstance(collector, dict):
+            raise ValueError("telemetry.%s must be an object" % name)
+        if "enabled" in collector and not isinstance(collector["enabled"], bool):
+            raise ValueError("telemetry.%s.enabled must be a boolean" % name)
+        for field in ("interval_s", "timeout_s"):
+            if field in collector and (
+                not isinstance(collector[field], (int, float))
+                or isinstance(collector[field], bool)
+                or collector[field] <= 0
+            ):
+                raise ValueError("telemetry.%s.%s must be positive" % (name, field))
+    vllm = telemetry.get("vllm", {})
+    if vllm.get("enabled", False) and not vllm.get("url"):
+        raise ValueError("telemetry.vllm.url is required when enabled")
+    command = telemetry.get("gpu", {}).get("command")
+    if command is not None and (not isinstance(command, str) or not command):
+        raise ValueError("telemetry.gpu.command must be a non-empty string")
 
 
 def resolve_config(config):
@@ -103,6 +129,29 @@ def resolve_config(config):
         "server",
         {"discovery": "unavailable", "launch_flags": []},
     )
+    telemetry = config.get("telemetry", {})
+    resolved["telemetry"] = {
+        "gpu": {
+            "enabled": telemetry.get("gpu", {}).get("enabled", False),
+            "interval_s": telemetry.get("gpu", {}).get("interval_s", 1.0),
+            "timeout_s": telemetry.get("gpu", {}).get("timeout_s", 5.0),
+            **(
+                {"command": telemetry["gpu"]["command"]}
+                if telemetry.get("gpu", {}).get("command")
+                else {}
+            ),
+        },
+        "vllm": {
+            "enabled": telemetry.get("vllm", {}).get("enabled", False),
+            "interval_s": telemetry.get("vllm", {}).get("interval_s", 1.0),
+            "timeout_s": telemetry.get("vllm", {}).get("timeout_s", 5.0),
+            **(
+                {"url": telemetry["vllm"]["url"]}
+                if telemetry.get("vllm", {}).get("url")
+                else {}
+            ),
+        },
+    }
     return resolved
 
 
@@ -395,7 +444,19 @@ def run_experiment(
         manifest = build_manifest(original, resolved, repo_root, utc_now())
     write_json(manifest_path, manifest)
 
+    telemetry = TelemetryManager(resolved["telemetry"], root)
+
     try:
+        try:
+            telemetry.start()
+        except Exception as error:
+            telemetry.summary.update(
+                {
+                    "enabled": True,
+                    "available": False,
+                    "startup_error": "%s: %s" % (type(error).__name__, error),
+                }
+            )
         order = sweep_order(resolved)
         if legacy_manifest_call:
             run_number = 0
@@ -407,6 +468,7 @@ def run_experiment(
                     run["index"],
                     run["concurrency"],
                 )
+                telemetry.mark("benchmark_started", **run)
                 result = runner(
                     command_for(
                         resolved,
@@ -414,6 +476,9 @@ def run_experiment(
                         root / (stem + ".jsonl"),
                         root / (stem + ".summary.json"),
                     )
+                )
+                telemetry.mark(
+                    "benchmark_finished", returncode=result.returncode, **run
                 )
                 if result.returncode != 0:
                     raise RuntimeError(
@@ -434,7 +499,9 @@ def run_experiment(
                 print("resume: keeping %s" % raw_path)
                 continue
             raw_path.parent.mkdir(parents=True, exist_ok=True)
+            telemetry.mark("benchmark_started", **run)
             result = runner(command_for(resolved, run, raw_path, summary_path))
+            telemetry.mark("benchmark_finished", returncode=result.returncode, **run)
             if result.returncode != 0:
                 raise RuntimeError(
                     "required %s %d at concurrency %d failed with exit code %d"
@@ -453,18 +520,29 @@ def run_experiment(
                     % raw_path
                 )
         combined = aggregate(resolved, root, order)
-        write_report(root, combined)
     except Exception:
         manifest["experiment"].update(
             {"completed_at_utc": utc_now(), "status": "failed"}
         )
         write_json(manifest_path, manifest)
         raise
+    finally:
+        try:
+            telemetry.stop()
+        except Exception as error:
+            telemetry.summary.update(
+                {
+                    "available": False,
+                    "cleanup_error": "%s: %s" % (type(error).__name__, error),
+                }
+            )
 
     manifest["experiment"].update(
         {"completed_at_utc": utc_now(), "status": "completed"}
     )
     write_json(manifest_path, manifest)
+    combined["telemetry"] = telemetry.summary
+    write_report(root, combined)
     summarize_results.write_csv(root)
     combined["manifest"] = manifest
     return combined

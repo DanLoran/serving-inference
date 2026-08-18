@@ -1,0 +1,7 @@
+# HELP vllm:num_requests_running Number of requests currently running on GPU.
+# TYPE vllm:num_requests_running gauge
+vllm:num_requests_running{model_name="fixture"} 3
+vllm:num_requests_waiting{model_name="fixture"} 2
+vllm:gpu_cache_usage_perc{model_name="fixture"} 0.625
+vllm:time_to_first_token_seconds_bucket{model_name="fixture",le="0.1"} 7
+vllm:generation_tokens_total{model_name="fixture"} 1234
