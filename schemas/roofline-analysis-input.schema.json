@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DanLoran/serving-inference/schemas/roofline-analysis-input.schema.json",
+  "title": "Serving inference roofline-style analysis input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "analysis", "device", "cases"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "analysis": {"type": "string", "minLength": 1},
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "memory_bandwidth", "compute_ceilings"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "memory_bandwidth": {"$ref": "#/$defs/bandwidth"},
+        "compute_ceilings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/compute_ceiling"}
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/case"}
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "accessed_at"],
+      "properties": {
+        "url": {"type": "string", "minLength": 1},
+        "accessed_at": {"type": "string", "format": "date"},
+        "related_urls": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "bandwidth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "derivation", "source"],
+      "properties": {
+        "value": {"type": "number", "exclusiveMinimum": 0},
+        "unit": {"const": "GB/s"},
+        "derivation": {"type": "string", "minLength": 1},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "compute_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "value",
+        "unit",
+        "dtype",
+        "execution",
+        "derivation",
+        "source"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "value": {"type": "number", "exclusiveMinimum": 0},
+        "unit": {"const": "TFLOP/s"},
+        "dtype": {"type": "string", "minLength": 1},
+        "execution": {"type": "string", "minLength": 1},
+        "derivation": {"type": "string", "minLength": 1},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "phase",
+        "workload",
+        "concurrency",
+        "unprofiled_experiment",
+        "rate_metric",
+        "compute_ceiling",
+        "measurement"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "phase": {"enum": ["prefill", "decode"]},
+        "workload": {"type": "string", "minLength": 1},
+        "concurrency": {"type": "integer", "minimum": 1},
+        "unprofiled_experiment": {"type": "string", "minLength": 1},
+        "rate_metric": {
+          "enum": [
+            "prompt_token_goodput_per_s",
+            "output_token_goodput_per_s"
+          ]
+        },
+        "compute_ceiling": {"type": "string", "minLength": 1},
+        "measurement": {
+          "oneOf": [
+            {"$ref": "#/$defs/unavailable_measurement"},
+            {"$ref": "#/$defs/counter_measurement"},
+            {"$ref": "#/$defs/estimate_measurement"}
+          ]
+        }
+      }
+    },
+    "unavailable_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "status", "scope", "reason"],
+      "properties": {
+        "kind": {"enum": ["counter", "estimate"]},
+        "status": {"const": "unavailable"},
+        "scope": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "dram_counter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value", "unit", "bytes_per_event"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number", "minimum": 0},
+        "unit": {"const": "byte"},
+        "bytes_per_event": {"const": 1}
+      }
+    },
+    "flop_counter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value", "unit", "flops_per_event", "execution"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number", "minimum": 0},
+        "unit": {"const": "event"},
+        "flops_per_event": {"type": "number", "exclusiveMinimum": 0},
+        "execution": {"type": "string", "minLength": 1}
+      }
+    },
+    "counter_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "status",
+        "scope",
+        "profile_metadata",
+        "profile_report",
+        "phase_tokens",
+        "dram_counters",
+        "flop_counters"
+      ],
+      "properties": {
+        "kind": {"const": "counter"},
+        "status": {"const": "available"},
+        "scope": {"type": "string", "minLength": 1},
+        "profile_metadata": {"type": "string", "minLength": 1},
+        "profile_report": {"type": "string", "minLength": 1},
+        "phase_tokens": {"type": "integer", "minimum": 1},
+        "dram_counters": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/dram_counter"}
+        },
+        "flop_counters": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/flop_counter"}
+        }
+      }
+    },
+    "estimate_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "status",
+        "scope",
+        "flops_per_token",
+        "dram_bytes_per_token",
+        "rationale",
+        "source"
+      ],
+      "properties": {
+        "kind": {"const": "estimate"},
+        "status": {"const": "available"},
+        "scope": {"type": "string", "minLength": 1},
+        "flops_per_token": {"type": "number", "exclusiveMinimum": 0},
+        "dram_bytes_per_token": {"type": "number", "exclusiveMinimum": 0},
+        "rationale": {"type": "string", "minLength": 1},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    }
+  }
+}

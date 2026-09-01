@@ -152,6 +152,29 @@ See [docs/profiling.md](docs/profiling.md) for configuration, capture bounds,
 counter-permission troubleshooting, cleanup behavior, and the required warning
 against direct profiled/unprofiled latency comparisons.
 
+### Roofline-style phase analysis
+
+Build an auditable prefill/decode roofline-style report by combining token rates
+rebuilt from ordinary unprofiled experiment artifacts with explicit device
+ceilings and representative Nsight Compute counters:
+
+```bash
+cp analysis/rtx-2060-super.example.json analysis/my-campaign.json
+# Replace placeholder experiment/capture paths and unavailable measurements.
+python3 scripts/analyze_roofline.py analysis/my-campaign.json
+```
+
+The analyzer writes schema-versioned JSON, Markdown, and separate prefill/decode
+roofline figures under `results/roofline/`. It hashes the unprofiled manifest,
+raw measured runs, profile metadata, and native Compute report; retains exact
+counter names, values, units, and FLOP multipliers; and marks missing counters
+unavailable instead of substituting estimates. Counter and estimate points are
+visually distinct. Profiled throughput/latency is never used.
+
+See [docs/analysis.md](docs/analysis.md) for the input schema, SI formulas,
+counter-export guidance, RTX 2060 SUPER theoretical-ceiling derivations, and why
+this scoped analysis must not be presented as a whole-model classical roofline.
+
 ### Saturation and stopping criteria
 
 Treat saturation as demonstrated only when increasing concurrency for two

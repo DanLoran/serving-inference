@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "analysis": "rtx-2060-super-example",
+  "device": {
+    "name": "NVIDIA GeForce RTX 2060 SUPER",
+    "memory_bandwidth": {
+      "value": 448.0,
+      "unit": "GB/s",
+      "derivation": "NVIDIA's launch article specifies 14 Gbps GDDR6; the NVIDIA 20-series comparison specifies a 256-bit interface. 14e9 bit/s per pin * 256 bit / 8 bit per byte = 448e9 byte/s.",
+      "source": {
+        "url": "https://www.nvidia.com/en-us/geforce/news/geforce-rtx-20-series-super-gpus/",
+        "accessed_at": "2026-08-31",
+        "related_urls": [
+          "https://www.nvidia.com/en-us/geforce/graphics-cards/compare/?section=compare-20"
+        ]
+      }
+    },
+    "compute_ceilings": [
+      {
+        "id": "fp32-cuda",
+        "label": "FP32 CUDA-core theoretical peak",
+        "value": 7.1808,
+        "unit": "TFLOP/s",
+        "dtype": "FP32",
+        "execution": "2176 CUDA cores at the 1.65 GHz reference boost clock; one FMA is two FLOPs",
+        "derivation": "2176 * 1.65e9 cycle/s * 2 FLOP/cycle / 1e12 = 7.1808 TFLOP/s",
+        "source": {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/compare/?section=compare-20",
+          "accessed_at": "2026-08-31"
+        }
+      },
+      {
+        "id": "fp16-tensor-dense",
+        "label": "FP16 dense Tensor Core theoretical peak",
+        "value": 57.4464,
+        "unit": "TFLOP/s",
+        "dtype": "FP16 multiply with FP32 accumulate",
+        "execution": "272 Turing Tensor Cores at the 1.65 GHz reference boost clock; dense operation rate without sparsity",
+        "derivation": "272 * 128 FLOP/cycle * 1.65e9 cycle/s / 1e12 = 57.4464 TFLOP/s",
+        "source": {
+          "url": "https://images.nvidia.com/aem-dam/en-zz/Solutions/design-visualization/technologies/turing-architecture/NVIDIA-Turing-Architecture-Whitepaper.pdf",
+          "accessed_at": "2026-08-31",
+          "related_urls": [
+            "https://www.nvidia.com/en-us/geforce/graphics-cards/compare/?section=compare-20",
+            "https://www.nvidia.com/en-us/geforce/news/geforce-rtx-20-series-super-gpus/"
+          ]
+        }
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "prefill-replace-with-capture",
+      "phase": "prefill",
+      "workload": "long_prefill",
+      "concurrency": 1,
+      "unprofiled_experiment": "results/experiments/replace-with-prefill-run",
+      "rate_metric": "prompt_token_goodput_per_s",
+      "compute_ceiling": "fp16-tensor-dense",
+      "measurement": {
+        "kind": "counter",
+        "status": "unavailable",
+        "scope": "replace with the exact selected prefill kernels and token count covered by the Nsight Compute capture",
+        "reason": "Template only: no RTX 2060 SUPER prefill counter capture is checked in."
+      }
+    },
+    {
+      "id": "decode-replace-with-capture",
+      "phase": "decode",
+      "workload": "decode_heavy",
+      "concurrency": 1,
+      "unprofiled_experiment": "results/experiments/replace-with-decode-run",
+      "rate_metric": "output_token_goodput_per_s",
+      "compute_ceiling": "fp16-tensor-dense",
+      "measurement": {
+        "kind": "counter",
+        "status": "unavailable",
+        "scope": "replace with the exact selected decode kernels and token count covered by the Nsight Compute capture",
+        "reason": "Template only: no RTX 2060 SUPER decode counter capture is checked in."
+      }
+    }
+  ]
+}

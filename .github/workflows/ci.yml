@@ -21,3 +21,4 @@ jobs:
       - run: shellcheck scripts/profile_nsys.sh scripts/profile_ncu.sh
       - run: python generate_prompts.py --verify
       - run: python scripts/run_experiment.py --help
+      - run: python scripts/analyze_roofline.py --help
