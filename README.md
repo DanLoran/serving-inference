@@ -207,7 +207,8 @@ Each workload alias is generated once beneath the campaign output and every
 sweep referencing that alias uses the same verified bytes. Define a separate
 workload config and alias, with a different `prompt_namespace`, when a sweep
 should use a disjoint deterministic prompt population. Use the same alias when
-reuse is intentional.
+reuse is intentional. Prompt text must be unique within each selected run; both
+workload generation and request loading reject duplicates before traffic starts.
 
 The campaign runner deliberately does not launch, restart, or flush the serving
 process. All selected sweeps run in their declared order against the same

@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import generate_prompts
 import run_campaign
 
 
@@ -119,6 +120,11 @@ class CampaignTest(unittest.TestCase):
         self.assertEqual([item["name"] for item in plan["sweeps"]], expected_names)
         for workload in plan["workloads"]:
             self.assertEqual(workload["resolved_config"]["request_count"], 256)
+            tokenizer = CharacterTokenizer()
+            rows = generate_prompts.generate(
+                workload["resolved_config"], tokenizer
+            )
+            self.assertEqual(len({row["prompt"] for row in rows}), 256)
         for sweep in plan["sweeps"]:
             self.assertEqual(sweep["experiment"]["num_requests"], 256)
             self.assertEqual(sweep["experiment"]["concurrency"], expected_concurrency)

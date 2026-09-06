@@ -291,7 +291,7 @@ def build_summary(args, results, duration):
 
 
 def load_prompts(path, num_requests):
-    with open(path) as prompt_file:
+    with open(path, encoding="utf-8") as prompt_file:
         prompts = [json.loads(line) for line in prompt_file if line.strip()]
     if not prompts:
         raise ValueError("No prompts were loaded from %s" % path)
@@ -300,7 +300,13 @@ def load_prompts(path, num_requests):
             "Requested %d requests but %s contains only %d prompts"
             % (num_requests, path, len(prompts))
         )
-    return prompts[:num_requests]
+    selected = prompts[:num_requests]
+    prompt_texts = [row.get("prompt") for row in selected]
+    if any(not isinstance(prompt, str) or not prompt for prompt in prompt_texts):
+        raise ValueError("Selected run contains a missing or empty prompt")
+    if len(prompt_texts) != len(set(prompt_texts)):
+        raise ValueError("Selected run contains duplicate prompt text")
+    return selected
 
 
 async def run(args):

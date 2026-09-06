@@ -92,6 +92,12 @@ class WorkloadTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "outside tolerance"):
             generate_prompts.validate_rows(rows, config())
 
+    def test_validation_rejects_duplicate_prompt_text(self):
+        rows = generate_prompts.generate(config(), CharacterTokenizer())
+        rows[1]["prompt"] = rows[0]["prompt"]
+        with self.assertRaisesRegex(ValueError, "unique within a workload"):
+            generate_prompts.validate_rows(rows, config())
+
     def test_bucket_counts_must_match_request_count(self):
         invalid = config()
         invalid["request_count"] = 9
