@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import generate_prompts
 import run_campaign
 
 
@@ -101,6 +102,37 @@ class CampaignTest(unittest.TestCase):
         for name in ("campaign.schema.json", "campaign-manifest.schema.json"):
             with (ROOT / "schemas" / name).open(encoding="utf-8") as handle:
                 self.assertIsInstance(json.load(handle), dict)
+
+    def test_baseline_collection_has_requested_workloads_and_concurrency(self):
+        campaign_path = ROOT / "campaigns" / "baseline-capacity-20260906.json"
+        campaign = run_campaign.load_campaign(campaign_path)
+        with tempfile.TemporaryDirectory() as directory:
+            plan = run_campaign.build_plan(
+                campaign,
+                campaign_path,
+                output_root=directory,
+            )
+        expected_names = ["mixed", "long-prefill", "long-decode", "short"]
+        expected_concurrency = [16, 24, 32, 64, 96, 128, 256]
+        self.assertEqual(
+            [item["name"] for item in plan["workloads"]], expected_names
+        )
+        self.assertEqual([item["name"] for item in plan["sweeps"]], expected_names)
+        for workload in plan["workloads"]:
+            self.assertEqual(workload["resolved_config"]["request_count"], 256)
+            tokenizer = CharacterTokenizer()
+            rows = generate_prompts.generate(
+                workload["resolved_config"], tokenizer
+            )
+            self.assertEqual(len({row["prompt"] for row in rows}), 256)
+        for sweep in plan["sweeps"]:
+            self.assertEqual(sweep["experiment"]["num_requests"], 256)
+            self.assertEqual(sweep["experiment"]["concurrency"], expected_concurrency)
+
+        mixed = plan["workloads"][0]["resolved_config"]
+        self.assertEqual(
+            [bucket["count"] for bucket in mixed["buckets"]], [128, 64, 64]
+        )
 
     def test_plan_resolves_matrix_and_global_overrides(self):
         with tempfile.TemporaryDirectory() as directory:

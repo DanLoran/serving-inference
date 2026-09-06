@@ -62,6 +62,29 @@ class MetricsTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "contains only 1 prompts"):
                 send_requests.load_prompts(prompts, 2)
 
+    def test_selected_run_rejects_duplicate_prompt_text(self):
+        with tempfile.TemporaryDirectory() as directory:
+            prompts = Path(directory) / "prompts.jsonl"
+            prompts.write_text(
+                '{"id":"one","prompt":"duplicate"}\n'
+                '{"id":"two","prompt":"duplicate"}\n',
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "duplicate prompt text"):
+                send_requests.load_prompts(prompts, 2)
+
+    def test_duplicate_outside_selected_run_does_not_block_selection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            prompts = Path(directory) / "prompts.jsonl"
+            prompts.write_text(
+                '{"id":"one","prompt":"selected"}\n'
+                '{"id":"two","prompt":"later"}\n'
+                '{"id":"three","prompt":"later"}\n',
+                encoding="utf-8",
+            )
+            selected = send_requests.load_prompts(prompts, 1)
+            self.assertEqual([row["id"] for row in selected], ["one"])
+
     def test_percentile_interpolates(self):
         self.assertEqual(send_requests.percentile([1, 2, 3], 50), 2)
         self.assertEqual(send_requests.percentile([1, 3], 50), 2)

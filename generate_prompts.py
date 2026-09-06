@@ -80,6 +80,11 @@ def validate_rows(rows, config):
     ids = [row["id"] for row in rows]
     if len(ids) != len(set(ids)):
         raise ValueError("request IDs must be unique")
+    prompts = [row.get("prompt") for row in rows]
+    if any(not isinstance(prompt, str) or not prompt for prompt in prompts):
+        raise ValueError("prompts must be non-empty strings")
+    if len(prompts) != len(set(prompts)):
+        raise ValueError("prompt text must be unique within a workload")
 
     tolerance = config.get("prompt_token_tolerance", 0)
     for row in rows:
