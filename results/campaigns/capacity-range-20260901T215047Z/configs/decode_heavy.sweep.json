@@ -1,0 +1,41 @@
+{
+  "name": "capacity-range-20260901T215047Z-decode-heavy-base",
+  "prompts": "/home/daniel/Desktop/root-workspace/vllm-test/results/campaigns/capacity-range-20260901T215047Z/workloads/base/decode_heavy.jsonl",
+  "url": "http://127.0.0.1:8000/v1/completions",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_metadata": {
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "dtype": "half",
+    "quantization": null,
+    "max_model_len": 2200
+  },
+  "server": {
+    "discovery": "explicit",
+    "launch_flags": [
+      "--host", "127.0.0.1",
+      "--port", "8000",
+      "--dtype", "half",
+      "--gpu-memory-utilization", "0.85",
+      "--max-model-len", "2200"
+    ]
+  },
+  "telemetry": {
+    "gpu": {"enabled": true, "interval_s": 1.0, "timeout_s": 5.0},
+    "vllm": {
+      "enabled": true,
+      "url": "http://127.0.0.1:8000/metrics",
+      "interval_s": 1.0,
+      "timeout_s": 5.0
+    }
+  },
+  "num_requests": 128,
+  "concurrency": [1, 2, 4, 8, 12, 16, 24, 32],
+  "warmups": 1,
+  "repeats": 3,
+  "seed": 20260901,
+  "stream": true,
+  "temperature": 0.0,
+  "timeout": 300,
+  "store_response": false,
+  "output_dir": "/home/daniel/Desktop/root-workspace/vllm-test/results/campaigns/capacity-range-20260901T215047Z/runs"
+}

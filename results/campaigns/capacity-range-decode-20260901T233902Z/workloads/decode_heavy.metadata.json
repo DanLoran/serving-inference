@@ -1,0 +1,21 @@
+{
+  "generation_config": {
+    "buckets": [
+      {
+        "count": 256,
+        "name": "decode_heavy",
+        "output_tokens": 512,
+        "prompt_tokens": 128
+      }
+    ],
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "name": "decode_heavy",
+    "prompt_token_tolerance": 4,
+    "request_count": 256,
+    "seed": 20260901,
+    "temperature": 0.0,
+    "tokenizer": "Qwen/Qwen2.5-0.5B-Instruct"
+  },
+  "schema_version": "1.0",
+  "workload_sha256": "2af8a4504ad5193de248b8b69120922ce5f7dd9e186e58b2882e699dfb9b4c44"
+}
