@@ -46,6 +46,20 @@ class WorkloadTest(unittest.TestCase):
             hashlib.sha256(generate_prompts.serialize_rows(second).encode()).hexdigest(),
         )
 
+    def test_prompt_namespace_controls_population_identity(self):
+        first_config = {**config(), "prompt_namespace": "population-a"}
+        second_config = {**config(), "prompt_namespace": "population-b"}
+        first = generate_prompts.generate(first_config, CharacterTokenizer())
+        second = generate_prompts.generate(second_config, CharacterTokenizer())
+        self.assertNotEqual(
+            [row["prompt"] for row in first],
+            [row["prompt"] for row in second],
+        )
+        self.assertEqual(
+            first,
+            generate_prompts.generate(first_config, CharacterTokenizer()),
+        )
+
     def test_lengths_ids_and_bucket_composition(self):
         rows = generate_prompts.generate(config(), CharacterTokenizer())
         self.assertEqual(len({row["id"] for row in rows}), len(rows))

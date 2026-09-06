@@ -1,0 +1,58 @@
+{
+  "$schema": "../schemas/campaign.schema.json",
+  "schema_version": "1.0",
+  "name": "rtx-2060-super-campaign-example",
+  "defaults": {
+    "url": "http://127.0.0.1:8000/v1/completions",
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_metadata": {
+      "revision": "main",
+      "dtype": "half",
+      "quantization": null,
+      "max_model_len": 2200
+    },
+    "server": {
+      "discovery": "explicit",
+      "launch_flags": [
+        "--host", "127.0.0.1",
+        "--port", "8000",
+        "--dtype", "half",
+        "--gpu-memory-utilization", "0.85",
+        "--max-model-len", "2200"
+      ]
+    },
+    "telemetry": {
+      "gpu": {"enabled": true, "interval_s": 1.0, "timeout_s": 5.0},
+      "vllm": {
+        "enabled": true,
+        "url": "http://127.0.0.1:8000/metrics",
+        "interval_s": 1.0,
+        "timeout_s": 5.0
+      }
+    },
+    "num_requests": 32,
+    "warmups": 1,
+    "repeats": 3,
+    "seed": 20260901,
+    "stream": true,
+    "temperature": 0.0,
+    "timeout": 300,
+    "store_response": false
+  },
+  "workloads": [
+    {"name": "decode-heavy", "config": "../experiments/decode_heavy.json"},
+    {"name": "long-prefill", "config": "../experiments/long_prefill.json"}
+  ],
+  "sweeps": [
+    {
+      "name": "decode-heavy-range",
+      "workload": "decode-heavy",
+      "concurrency": [1, 2, 4, 8, 12, 16, 24, 32]
+    },
+    {
+      "name": "long-prefill-range",
+      "workload": "long-prefill",
+      "concurrency": [1, 2, 4, 8, 12, 16, 24, 32]
+    }
+  ]
+}

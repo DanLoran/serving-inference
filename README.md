@@ -41,6 +41,12 @@ a row outside `prompt_token_tolerance`, currently four tokens. This small bound
 accounts for tokenizer decode/re-encode normalization while actual counts remain
 recorded per request. The metadata sidecar
 preserves the full generation config and SHA-256 of the canonical JSONL bytes.
+Set `prompt_namespace` in a workload config when two generated request
+populations must have different prompt text even if their workload shape and
+request indices are otherwise identical. Reusing a namespace intentionally
+reuses the same prompt population; changing it creates a deterministic,
+separate population. This makes prompt-cache exposure an explicit campaign
+choice instead of a side effect of how files were generated.
 
 Generate one workload or validate all checked-in artifacts without downloading
 a tokenizer:
@@ -87,6 +93,139 @@ byte-for-byte; a partial, corrupt, or failed required run stops with a clear
 error so evidence is never silently overwritten. The saved config must also
 match exactly. Warmups remain on disk for auditability but are excluded from the
 combined report.
+
+## Config-driven campaigns
+
+Use `scripts/run_campaign.py` when an experiment contains multiple workloads,
+phases, or concurrency ranges. A campaign definition under `campaigns/` names
+the workload configs and lists its sweeps in execution order, so extending a
+campaign requires editing data rather than Python source code.
+
+### Set up a campaign
+
+1. Copy `campaigns/example.json` to a new, uniquely named campaign file.
+2. Create or reuse one workload config for each prompt population. For a new
+   population, copy the closest config from `experiments/`, set
+   `request_count`, make the bucket counts add up to it, and set a unique
+   `prompt_namespace`.
+3. List those workload configs under `workloads`. Relative paths are resolved
+   from the campaign file's directory.
+4. Put common serving and measurement settings under `defaults`, then list the
+   ordered conditions under `sweeps`. A sweep can override a default such as
+   `num_requests`, `warmups`, `repeats`, or `seed`.
+
+The essential structure is:
+
+```json
+{
+  "schema_version": "1.0",
+  "name": "my-capacity-campaign",
+  "defaults": {
+    "url": "http://127.0.0.1:8000/v1/completions",
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_metadata": {
+      "revision": "<exact-model-revision>",
+      "dtype": "half",
+      "quantization": null,
+      "max_model_len": 2200
+    },
+    "server": {"discovery": "explicit", "launch_flags": ["<exact flags>"]},
+    "num_requests": 256,
+    "warmups": 1,
+    "repeats": 3,
+    "seed": 20260902
+  },
+  "workloads": [
+    {"name": "decode-a", "config": "workloads/decode-a.json"},
+    {"name": "prefill-a", "config": "workloads/prefill-a.json"}
+  ],
+  "sweeps": [
+    {"name": "decode-range", "workload": "decode-a", "concurrency": [8, 16, 24, 32]},
+    {"name": "prefill-range", "workload": "prefill-a", "concurrency": [1, 2, 4, 8]}
+  ]
+}
+```
+
+Use the complete model revision and server flags from the service being tested;
+the OpenAI-compatible endpoint cannot reliably discover them. Validate the plan
+with a dry run:
+
+Inspect the fully resolved matrix without generating prompts, contacting the
+server, or creating output files:
+
+```bash
+python3 scripts/run_campaign.py --config campaigns/example.json --dry-run
+```
+
+Review the resolved workload paths, request counts, concurrency lists, warmups,
+repeats, seed, model metadata, and launch flags in that output. Commit the final
+campaign and workload definitions before an official run, because the runner
+requires a clean checkout:
+
+```bash
+git add campaigns/my-campaign.json campaigns/workloads/
+git commit -m "Define capacity campaign"
+```
+
+Start the server separately with the exact recorded settings, confirm its model
+endpoint is healthy, then run the campaign. The runner generates and
+hash-verifies its prompt files before sending traffic.
+
+Run the complete campaign against an already-running server:
+
+```bash
+python3 scripts/run_campaign.py --config campaigns/example.json
+```
+
+Run the same command again to resume. Fully completed conditions are preserved;
+partial, corrupt, failed, or configuration-mismatched evidence is never
+overwritten. Use a new campaign `name` or `--output-root` when changing an
+already-started campaign.
+
+The command accepts global condition overrides, making one-off range changes
+possible without editing either runner. Overrides are recorded in the resolved
+plan, but final campaigns should put their chosen conditions in the committed
+campaign definition:
+
+```bash
+python3 scripts/run_campaign.py \
+  --config campaigns/example.json \
+  --concurrency 8 16 24 32 48 \
+  --num-requests 32 \
+  --warmups 1 \
+  --repeats 5 \
+  --seed 20260902 \
+  --dry-run
+```
+
+`--sweep NAME` and `--workload NAME` can be repeated to execute only part of
+the resolved plan. Selection changes what executes, not what is recorded in the
+full plan. Condition overrides apply to every sweep in that plan. The runner
+rejects an override requesting more rows than its workload contains.
+
+Each workload alias is generated once beneath the campaign output and every
+sweep referencing that alias uses the same verified bytes. Define a separate
+workload config and alias, with a different `prompt_namespace`, when a sweep
+should use a disjoint deterministic prompt population. Use the same alias when
+reuse is intentional.
+
+The campaign runner deliberately does not launch, restart, or flush the serving
+process. All selected sweeps run in their declared order against the same
+server, preserving production-like server and cache state. Any server lifecycle
+change should be an explicit part of the surrounding protocol, not a hidden
+runner behavior.
+
+Outputs are stored under `results/campaigns/<campaign-name>/`: the original
+definition, resolved plan, campaign status manifest, generated workload configs
+and hash-verified prompt artifacts, plus each existing experiment runner's raw
+evidence and reports. Complete sweeps resume through the existing strict resume
+checks. A partial selection is recorded as `partial`; the campaign becomes
+`completed` only after every declared sweep completes.
+
+Official runs require a clean Git checkout so the source revision and campaign
+definition identify the code that ran. `--allow-dirty` is available for local
+development and smoke tests. Campaign outputs are ignored by Git by default;
+copy or archive them separately when they need durable storage.
 
 ### GPU and vLLM telemetry
 
