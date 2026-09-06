@@ -101,6 +101,55 @@ phases, or concurrency ranges. A campaign definition under `campaigns/` names
 the workload configs and lists its sweeps in execution order, so extending a
 campaign requires editing data rather than Python source code.
 
+### Set up a campaign
+
+1. Copy `campaigns/example.json` to a new, uniquely named campaign file.
+2. Create or reuse one workload config for each prompt population. For a new
+   population, copy the closest config from `experiments/`, set
+   `request_count`, make the bucket counts add up to it, and set a unique
+   `prompt_namespace`.
+3. List those workload configs under `workloads`. Relative paths are resolved
+   from the campaign file's directory.
+4. Put common serving and measurement settings under `defaults`, then list the
+   ordered conditions under `sweeps`. A sweep can override a default such as
+   `num_requests`, `warmups`, `repeats`, or `seed`.
+
+The essential structure is:
+
+```json
+{
+  "schema_version": "1.0",
+  "name": "my-capacity-campaign",
+  "defaults": {
+    "url": "http://127.0.0.1:8000/v1/completions",
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_metadata": {
+      "revision": "<exact-model-revision>",
+      "dtype": "half",
+      "quantization": null,
+      "max_model_len": 2200
+    },
+    "server": {"discovery": "explicit", "launch_flags": ["<exact flags>"]},
+    "num_requests": 256,
+    "warmups": 1,
+    "repeats": 3,
+    "seed": 20260902
+  },
+  "workloads": [
+    {"name": "decode-a", "config": "workloads/decode-a.json"},
+    {"name": "prefill-a", "config": "workloads/prefill-a.json"}
+  ],
+  "sweeps": [
+    {"name": "decode-range", "workload": "decode-a", "concurrency": [8, 16, 24, 32]},
+    {"name": "prefill-range", "workload": "prefill-a", "concurrency": [1, 2, 4, 8]}
+  ]
+}
+```
+
+Use the complete model revision and server flags from the service being tested;
+the OpenAI-compatible endpoint cannot reliably discover them. Validate the plan
+with a dry run:
+
 Inspect the fully resolved matrix without generating prompts, contacting the
 server, or creating output files:
 
@@ -108,14 +157,35 @@ server, or creating output files:
 python3 scripts/run_campaign.py --config campaigns/example.json --dry-run
 ```
 
+Review the resolved workload paths, request counts, concurrency lists, warmups,
+repeats, seed, model metadata, and launch flags in that output. Commit the final
+campaign and workload definitions before an official run, because the runner
+requires a clean checkout:
+
+```bash
+git add campaigns/my-campaign.json campaigns/workloads/
+git commit -m "Define capacity campaign"
+```
+
+Start the server separately with the exact recorded settings, confirm its model
+endpoint is healthy, then run the campaign. The runner generates and
+hash-verifies its prompt files before sending traffic.
+
 Run the complete campaign against an already-running server:
 
 ```bash
 python3 scripts/run_campaign.py --config campaigns/example.json
 ```
 
+Run the same command again to resume. Fully completed conditions are preserved;
+partial, corrupt, failed, or configuration-mismatched evidence is never
+overwritten. Use a new campaign `name` or `--output-root` when changing an
+already-started campaign.
+
 The command accepts global condition overrides, making one-off range changes
-possible without editing either runner:
+possible without editing either runner. Overrides are recorded in the resolved
+plan, but final campaigns should put their chosen conditions in the committed
+campaign definition:
 
 ```bash
 python3 scripts/run_campaign.py \
