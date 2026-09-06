@@ -41,6 +41,12 @@ a row outside `prompt_token_tolerance`, currently four tokens. This small bound
 accounts for tokenizer decode/re-encode normalization while actual counts remain
 recorded per request. The metadata sidecar
 preserves the full generation config and SHA-256 of the canonical JSONL bytes.
+Set `prompt_namespace` in a workload config when two generated request
+populations must have different prompt text even if their workload shape and
+request indices are otherwise identical. Reusing a namespace intentionally
+reuses the same prompt population; changing it creates a deterministic,
+separate population. This makes prompt-cache exposure an explicit campaign
+choice instead of a side effect of how files were generated.
 
 Generate one workload or validate all checked-in artifacts without downloading
 a tokenizer:
@@ -87,6 +93,69 @@ byte-for-byte; a partial, corrupt, or failed required run stops with a clear
 error so evidence is never silently overwritten. The saved config must also
 match exactly. Warmups remain on disk for auditability but are excluded from the
 combined report.
+
+## Config-driven campaigns
+
+Use `scripts/run_campaign.py` when an experiment contains multiple workloads,
+phases, or concurrency ranges. A campaign definition under `campaigns/` names
+the workload configs and lists its sweeps in execution order, so extending a
+campaign requires editing data rather than Python source code.
+
+Inspect the fully resolved matrix without generating prompts, contacting the
+server, or creating output files:
+
+```bash
+python3 scripts/run_campaign.py --config campaigns/example.json --dry-run
+```
+
+Run the complete campaign against an already-running server:
+
+```bash
+python3 scripts/run_campaign.py --config campaigns/example.json
+```
+
+The command accepts global condition overrides, making one-off range changes
+possible without editing either runner:
+
+```bash
+python3 scripts/run_campaign.py \
+  --config campaigns/example.json \
+  --concurrency 8 16 24 32 48 \
+  --num-requests 32 \
+  --warmups 1 \
+  --repeats 5 \
+  --seed 20260902 \
+  --dry-run
+```
+
+`--sweep NAME` and `--workload NAME` can be repeated to execute only part of
+the resolved plan. Selection changes what executes, not what is recorded in the
+full plan. Condition overrides apply to every sweep in that plan. The runner
+rejects an override requesting more rows than its workload contains.
+
+Each workload alias is generated once beneath the campaign output and every
+sweep referencing that alias uses the same verified bytes. Define a separate
+workload config and alias, with a different `prompt_namespace`, when a sweep
+should use a disjoint deterministic prompt population. Use the same alias when
+reuse is intentional.
+
+The campaign runner deliberately does not launch, restart, or flush the serving
+process. All selected sweeps run in their declared order against the same
+server, preserving production-like server and cache state. Any server lifecycle
+change should be an explicit part of the surrounding protocol, not a hidden
+runner behavior.
+
+Outputs are stored under `results/campaigns/<campaign-name>/`: the original
+definition, resolved plan, campaign status manifest, generated workload configs
+and hash-verified prompt artifacts, plus each existing experiment runner's raw
+evidence and reports. Complete sweeps resume through the existing strict resume
+checks. A partial selection is recorded as `partial`; the campaign becomes
+`completed` only after every declared sweep completes.
+
+Official runs require a clean Git checkout so the source revision and campaign
+definition identify the code that ran. `--allow-dirty` is available for local
+development and smoke tests. Campaign outputs are ignored by Git by default;
+copy or archive them separately when they need durable storage.
 
 ### GPU and vLLM telemetry
 

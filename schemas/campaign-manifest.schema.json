@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DanLoran/serving-inference/schemas/campaign-manifest.schema.json",
+  "title": "Serving inference campaign manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "campaign", "source", "sweeps"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "started_at_utc", "completed_at_utc", "status"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "started_at_utc": {"type": "string"},
+        "completed_at_utc": {"type": ["string", "null"]},
+        "status": {"enum": ["running", "partial", "completed", "failed"]}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["git"],
+      "properties": {
+        "git": {
+          "type": "object",
+          "required": ["available", "revision", "dirty"],
+          "properties": {
+            "available": {"type": "boolean"},
+            "revision": {"type": ["string", "null"]},
+            "dirty": {"type": ["boolean", "null"]}
+          }
+        }
+      }
+    },
+    "sweeps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "workload", "order", "output", "status"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "workload": {"type": "string", "minLength": 1},
+          "order": {"type": "integer", "minimum": 1},
+          "output": {"type": "string", "minLength": 1},
+          "status": {"enum": ["not_run", "running", "completed", "failed"]},
+          "workload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  }
+}

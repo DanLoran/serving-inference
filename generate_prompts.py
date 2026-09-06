@@ -40,6 +40,9 @@ def load_config(path):
         raise ValueError("unknown workload: %s" % config["name"])
     if config["model"] != config["tokenizer"]:
         raise ValueError("model and tokenizer must match exactly")
+    namespace = config.get("prompt_namespace", config["name"])
+    if not isinstance(namespace, str) or not namespace.strip():
+        raise ValueError("prompt_namespace must be a non-empty string")
     return config
 
 
@@ -109,9 +112,10 @@ def serialize_rows(rows):
 
 def generate(config, tokenizer):
     rows = []
+    prompt_namespace = config.get("prompt_namespace", config["name"])
     for index, bucket in enumerate(bucket_sequence(config)):
         prompt, prompt_tokens = make_prompt(
-            tokenizer, bucket["prompt_tokens"], config["name"], index
+            tokenizer, bucket["prompt_tokens"], prompt_namespace, index
         )
         rows.append(
             {

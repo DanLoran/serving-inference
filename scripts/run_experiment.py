@@ -29,9 +29,7 @@ REQUIRED_FIELDS = {
 }
 
 
-def load_config(path):
-    with Path(path).open(encoding="utf-8") as handle:
-        config = json.load(handle)
+def validate_config(config):
     missing = REQUIRED_FIELDS.difference(config)
     if missing:
         raise ValueError("missing config fields: %s" % ", ".join(sorted(missing)))
@@ -73,6 +71,12 @@ def load_config(path):
         raise ValueError("server.launch_flags must be a list")
     validate_telemetry(config.get("telemetry", {}))
     return config
+
+
+def load_config(path):
+    with Path(path).open(encoding="utf-8") as handle:
+        config = json.load(handle)
+    return validate_config(config)
 
 
 def validate_telemetry(telemetry):
