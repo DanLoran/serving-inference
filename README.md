@@ -295,6 +295,13 @@ kill or host failure, inspect the recorded PID, process command, port, and GPU
 state before taking any manual action; never assume a listener is the campaign's
 server.
 
+For pip or uv environments that install CUDA runtime libraries inside the
+virtual environment, the managed launcher discovers directories containing
+`libcudart` beside the configured vLLM executable and prepends them to the
+server's `LD_LIBRARY_PATH`. Configured and inherited library paths are retained
+without duplication. The effective path and its discovered entries are saved in
+each `server/launch-NNN.json`; the parent shell does not need a hidden export.
+
 Outputs are stored under `results/campaigns/<campaign-name>/`: the original
 definition, resolved plan, campaign status manifest, generated workload configs
 and hash-verified prompt artifacts, plus each existing experiment runner's raw

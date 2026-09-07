@@ -235,6 +235,37 @@ def resolve_command(command, repo_root):
     return resolved
 
 
+def discover_cuda_runtime_paths(command):
+    """Find pip-installed CUDA runtime libraries beside the server executable."""
+    executable = Path(command[0]).resolve()
+    virtual_environment = executable.parent.parent
+    paths = []
+    pattern = "lib/python*/site-packages/nvidia/**/lib/libcudart.so*"
+    for library in virtual_environment.glob(pattern):
+        directory = str(library.parent.resolve())
+        if directory not in paths:
+            paths.append(directory)
+    return paths
+
+
+def server_environment(command, configured, inherited=None):
+    """Build a launch environment with discoverable CUDA runtimes first."""
+    inherited = dict(os.environ if inherited is None else inherited)
+    environment = dict(inherited)
+    environment.update(configured)
+    candidates = discover_cuda_runtime_paths(command)
+    for source in (
+        configured.get("LD_LIBRARY_PATH", ""),
+        inherited.get("LD_LIBRARY_PATH", ""),
+    ):
+        for directory in source.split(os.pathsep):
+            if directory and directory not in candidates:
+                candidates.append(directory)
+    if candidates:
+        environment["LD_LIBRARY_PATH"] = os.pathsep.join(candidates)
+    return environment, candidates
+
+
 def build_plan(config, config_path, campaign_root=None):
     if campaign_root is None:
         output_root = Path(config["output_root"])
@@ -353,12 +384,18 @@ class ManagedServer:
             )
         self.generation += 1
         command = resolve_command(self.config["command"], self.repo_root)
-        environment = dict(os.environ)
-        environment.update(self.config["environment"])
+        environment, runtime_paths = server_environment(
+            command, self.config["environment"]
+        )
         self.artifact_root.mkdir(parents=True, exist_ok=True)
         atomic_write_json(
             self.artifact_root / ("launch-%03d.json" % self.generation),
-            {"command": command, "environment": self.config["environment"]},
+            {
+                "command": command,
+                "environment": self.config["environment"],
+                "effective_ld_library_path": environment.get("LD_LIBRARY_PATH"),
+                "discovered_cuda_runtime_paths": runtime_paths,
+            },
         )
         self.log_handle = (
             self.artifact_root / ("server-%03d.log" % self.generation)

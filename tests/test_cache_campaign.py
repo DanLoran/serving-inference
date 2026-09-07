@@ -72,6 +72,44 @@ def small_bank_config(nonce_base=0):
 
 
 class CacheCampaignTest(unittest.TestCase):
+    def test_server_environment_discovers_pip_cuda_runtime(self):
+        with tempfile.TemporaryDirectory() as directory:
+            virtual_environment = Path(directory) / ".venv"
+            executable = virtual_environment / "bin" / "vllm"
+            executable.parent.mkdir(parents=True)
+            executable.touch()
+            cuda = (
+                virtual_environment
+                / "lib"
+                / "python3.12"
+                / "site-packages"
+                / "nvidia"
+                / "cu13"
+                / "lib"
+            )
+            cuda.mkdir(parents=True)
+            (cuda / "libcudart.so.13").touch()
+            environment, discovered = run_cache_campaign.server_environment(
+                [str(executable)],
+                {"VLLM_SERVER_DEV_MODE": "1"},
+                {"LD_LIBRARY_PATH": "/usr/local/cuda/lib64"},
+            )
+            self.assertEqual(discovered[0], str(cuda.resolve()))
+            self.assertEqual(
+                environment["LD_LIBRARY_PATH"].split(":"),
+                [str(cuda.resolve()), "/usr/local/cuda/lib64"],
+            )
+            self.assertEqual(environment["VLLM_SERVER_DEV_MODE"], "1")
+
+    def test_server_environment_deduplicates_configured_paths(self):
+        environment, paths = run_cache_campaign.server_environment(
+            ["/not-a-venv/bin/vllm"],
+            {"LD_LIBRARY_PATH": "/cuda:/shared"},
+            {"LD_LIBRARY_PATH": "/shared:/system"},
+        )
+        self.assertEqual(paths, ["/cuda", "/shared", "/system"])
+        self.assertEqual(environment["LD_LIBRARY_PATH"], "/cuda:/shared:/system")
+
     def test_checked_in_campaign_has_exact_requested_matrix(self):
         path = ROOT / "campaigns" / "cache-capacity-baseline.json"
         config = run_cache_campaign.load_config(path)
