@@ -216,6 +216,85 @@ server, preserving production-like server and cache state. Any server lifecycle
 change should be an explicit part of the surrounding protocol, not a hidden
 runner behavior.
 
+### Controlled prefix-cache campaigns
+
+Use `scripts/run_cache_campaign.py` when cache state is an experimental
+variable rather than production-like background state. It is intentionally
+separate from the ordinary campaign runner: it refuses an occupied server port,
+launches and owns the configured server process, drains and resets the cache
+before every measured concurrency/repeat, prewarms only the declared shared
+prefixes, and stops only that owned process during cleanup.
+
+The checked-in baseline reproduces the four cache-enabled workloads and common
+concurrency sweep:
+
+```bash
+python3 scripts/run_cache_campaign.py plan \
+  --config campaigns/cache-capacity-baseline.json
+```
+
+`plan` has no server or output side effects. Review its 84 conditions, 258,048
+measured requests, server command, block size, prefix lengths, and exact mixed
+counts before starting. Commit the final definition and implementation first;
+the runner refuses an official run from a dirty checkout. A run creates a new
+UTC-stamped directory by default.
+The current client does not implement a proven ramp/steady-state/drain window,
+so this definition uses the specified fallback of 3,072 measured requests per
+repeat rather than presenting a burst as fixed-duration steady state.
+Pass an explicit, new `--campaign-root` when a supervisor needs to know the path
+in advance:
+
+```bash
+CAMPAIGN_ROOT=results/campaigns/cache-capacity-baseline-YYYYMMDDTHHMMSSZ
+python3 scripts/run_cache_campaign.py run \
+  --config campaigns/cache-capacity-baseline.json \
+  --campaign-root "$CAMPAIGN_ROOT"
+```
+
+The runner is designed to be launched once in a durable terminal or background
+job. Observe it by reading one small, atomically replaced file instead of
+streaming logs through an agent:
+
+```bash
+python3 scripts/run_cache_campaign.py status --campaign-root "$CAMPAIGN_ROOT"
+```
+
+Each condition writes beneath
+`runs/<workload>/concurrency-NNN/repeat-NN/attempt-NNN/`. A complete attempt is
+never rerun. A partial, interrupted, corrupt, or failed attempt remains intact;
+the next invocation creates a new numbered attempt and generates a disjoint,
+deterministic prompt bank for it. This makes resume attempt-based rather than
+file-overwrite based.
+
+Prompt banks are deterministic gzip JSONL. Every measured prompt is exact after
+tokenizer round-trip, complete-prompt hashes are retained, and the first unique
+block does not repeat within a bank. Shared prefixes are exact multiples of the
+declared cache block size. Prefix-only prewarms cannot equal complete measured
+prompts. Mixed counts are 1,536 short, 768 long-prefill, and 768 decode-heavy
+for every 3,072-request repeat.
+
+The preferred reset is the supported `/reset_prefix_cache` endpoint. If it is
+unavailable, the runner restarts only the server process it launched. A reset is
+accepted only when the subsequent excluded prefix prewarm records zero cache-hit
+tokens. After measured traffic, the achieved token hit rate is calculated from
+vLLM prefix-hit and prefix-query counter deltas and checked against the declared
+rate; it is never inferred solely from prompt construction.
+
+On completion, `analysis/analysis.json`, `analysis/summary.csv`, and
+`analysis/report.md` rebuild aggregate and per-repeat results. Mixed results are
+also split by request class. Because vLLM exposes cache counters at the server
+level, the mixed aggregate has a measured hit rate while class rows retain the
+intended rate and explicitly mark measured per-class cache rate unavailable.
+The report classifies adjacent concurrency transitions as useful batching,
+queueing-dominant, or a throughput plateau and recommends either another
+baseline or a server-parameter campaign.
+
+Signals and normal exceptions trigger owned-server cleanup. The final cleanup
+record captures port state and post-run GPU state. After an uncatchable process
+kill or host failure, inspect the recorded PID, process command, port, and GPU
+state before taking any manual action; never assume a listener is the campaign's
+server.
+
 Outputs are stored under `results/campaigns/<campaign-name>/`: the original
 definition, resolved plan, campaign status manifest, generated workload configs
 and hash-verified prompt artifacts, plus each existing experiment runner's raw
@@ -462,6 +541,8 @@ python3 generate_prompts.py --help
 python3 generate_prompts.py --verify
 python3 scripts/send_requests.py --help
 python3 scripts/run_experiment.py --help
+python3 scripts/run_campaign.py --help
+python3 scripts/run_cache_campaign.py --help
 python3 scripts/summarize_results.py --help
 python3 scripts/plot_results.py --help
 ```
