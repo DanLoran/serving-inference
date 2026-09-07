@@ -8,6 +8,7 @@ throughput.
 
 import argparse
 import asyncio
+import gzip
 import json
 import math
 import time
@@ -106,15 +107,26 @@ async def read_stream(response, clock=time.perf_counter):
 
 
 def request_metadata(row, request_index, payload):
-    return {
+    metadata = {
         "schema_version": RESULT_SCHEMA_VERSION,
         "id": row.get("id"),
         "request_index": request_index,
         "workload": row.get("workload") or row.get("category"),
+        "bucket": row.get("bucket"),
         "prompt_tokens": row.get("prompt_tokens"),
         "target_prompt_tokens": row.get("target_prompt_tokens"),
         "target_output_tokens": payload["max_tokens"],
     }
+    for field in (
+        "bank_id",
+        "prompt_sha256",
+        "shared_prefix_tokens",
+        "prefix_key",
+        "prefix_sha256",
+    ):
+        if row.get(field) is not None:
+            metadata[field] = row[field]
+    return metadata
 
 
 def truncate_error_body(body):
@@ -291,7 +303,8 @@ def build_summary(args, results, duration):
 
 
 def load_prompts(path, num_requests):
-    with open(path, encoding="utf-8") as prompt_file:
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, mode="rt", encoding="utf-8") as prompt_file:
         prompts = [json.loads(line) for line in prompt_file if line.strip()]
     if not prompts:
         raise ValueError("No prompts were loaded from %s" % path)

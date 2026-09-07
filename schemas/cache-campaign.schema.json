@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DanLoran/serving-inference/schemas/cache-campaign.schema.json",
+  "title": "Controlled prefix-cache capacity campaign",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "name",
+    "output_root",
+    "model",
+    "model_revision",
+    "tokenizer",
+    "tokenizer_revision",
+    "seed",
+    "concurrency",
+    "repeats",
+    "requests_per_repeat",
+    "block_size_tokens",
+    "server",
+    "client",
+    "telemetry",
+    "workloads"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "cache-campaign-1.0"},
+    "name": {"$ref": "#/$defs/pathSafeName"},
+    "output_root": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "model_revision": {"type": "string", "minLength": 1},
+    "tokenizer": {"type": "string", "minLength": 1},
+    "tokenizer_revision": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer"},
+    "concurrency": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "integer", "minimum": 1}
+    },
+    "repeats": {"type": "integer", "minimum": 1},
+    "requests_per_repeat": {"type": "integer", "minimum": 1},
+    "block_size_tokens": {"type": "integer", "minimum": 1},
+    "cache_hit_rate_tolerance": {"type": "number", "minimum": 0, "maximum": 1},
+    "gpu_release_tolerance_mib": {"type": "number", "minimum": 0},
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "environment",
+        "health_url",
+        "metrics_url",
+        "cache_reset_url",
+        "host",
+        "port",
+        "startup_timeout_s",
+        "drain_timeout_s",
+        "shutdown_timeout_s"
+      ],
+      "properties": {
+        "command": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "environment": {"type": "object", "additionalProperties": {"type": "string"}},
+        "health_url": {"type": "string", "minLength": 1},
+        "metrics_url": {"type": "string", "minLength": 1},
+        "cache_reset_url": {"type": "string", "minLength": 1},
+        "host": {"type": "string", "minLength": 1},
+        "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+        "startup_timeout_s": {"type": "number", "exclusiveMinimum": 0},
+        "drain_timeout_s": {"type": "number", "exclusiveMinimum": 0},
+        "shutdown_timeout_s": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "stream", "temperature", "timeout_s", "store_response"],
+      "properties": {
+        "url": {"type": "string", "minLength": 1},
+        "stream": {"const": true},
+        "temperature": {"const": 0.0},
+        "timeout_s": {"type": "number", "exclusiveMinimum": 0},
+        "store_response": {"type": "boolean"}
+      }
+    },
+    "telemetry": {"type": "object"},
+    "workloads": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "buckets"],
+        "properties": {
+          "name": {"$ref": "#/$defs/pathSafeName"},
+          "buckets": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "count", "prompt_tokens", "output_tokens", "shared_prefix_tokens"],
+              "properties": {
+                "name": {"$ref": "#/$defs/pathSafeName"},
+                "count": {"type": "integer", "minimum": 1},
+                "prompt_tokens": {"type": "integer", "minimum": 1},
+                "output_tokens": {"type": "integer", "minimum": 1},
+                "shared_prefix_tokens": {"type": "integer", "minimum": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "pathSafeName": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^/\\\\]+$",
+      "not": {"enum": [".", ".."]}
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "../schemas/cache-campaign.schema.json",
+  "schema_version": "cache-campaign-1.0",
+  "name": "cache-capacity-baseline",
+  "output_root": "results/campaigns",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "tokenizer": "Qwen/Qwen2.5-0.5B-Instruct",
+  "tokenizer_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "seed": 20260906,
+  "concurrency": [16, 24, 32, 64, 96, 128, 256],
+  "repeats": 3,
+  "requests_per_repeat": 3072,
+  "block_size_tokens": 16,
+  "cache_hit_rate_tolerance": 0.01,
+  "gpu_release_tolerance_mib": 256,
+  "server": {
+    "command": [
+      ".venv/bin/vllm",
+      "serve",
+      "Qwen/Qwen2.5-0.5B-Instruct",
+      "--revision", "7ae557604adf67be50417f59c2c2f167def9a775",
+      "--tokenizer-revision", "7ae557604adf67be50417f59c2c2f167def9a775",
+      "--host", "127.0.0.1",
+      "--port", "8000",
+      "--dtype", "half",
+      "--gpu-memory-utilization", "0.85",
+      "--max-model-len", "2200",
+      "--enable-prefix-caching"
+    ],
+    "environment": {"VLLM_SERVER_DEV_MODE": "1"},
+    "health_url": "http://127.0.0.1:8000/v1/models",
+    "metrics_url": "http://127.0.0.1:8000/metrics",
+    "cache_reset_url": "http://127.0.0.1:8000/reset_prefix_cache",
+    "host": "127.0.0.1",
+    "port": 8000,
+    "startup_timeout_s": 600,
+    "drain_timeout_s": 90,
+    "shutdown_timeout_s": 90
+  },
+  "client": {
+    "url": "http://127.0.0.1:8000/v1/completions",
+    "stream": true,
+    "temperature": 0.0,
+    "timeout_s": 300,
+    "store_response": false
+  },
+  "telemetry": {
+    "gpu": {"enabled": true, "interval_s": 1.0, "timeout_s": 5.0},
+    "vllm": {
+      "enabled": true,
+      "url": "http://127.0.0.1:8000/metrics",
+      "interval_s": 1.0,
+      "timeout_s": 5.0
+    }
+  },
+  "workloads": [
+    {
+      "name": "short",
+      "buckets": [
+        {"name": "short", "count": 3072, "prompt_tokens": 128, "output_tokens": 64, "shared_prefix_tokens": 64}
+      ]
+    },
+    {
+      "name": "decode_heavy",
+      "buckets": [
+        {"name": "decode_heavy", "count": 3072, "prompt_tokens": 128, "output_tokens": 512, "shared_prefix_tokens": 64}
+      ]
+    },
+    {
+      "name": "long_prefill",
+      "buckets": [
+        {"name": "long_prefill", "count": 3072, "prompt_tokens": 2048, "output_tokens": 64, "shared_prefix_tokens": 1024}
+      ]
+    },
+    {
+      "name": "mixed",
+      "buckets": [
+        {"name": "short", "count": 1536, "prompt_tokens": 128, "output_tokens": 64, "shared_prefix_tokens": 64},
+        {"name": "long_prefill", "count": 768, "prompt_tokens": 2048, "output_tokens": 64, "shared_prefix_tokens": 1024},
+        {"name": "decode_heavy", "count": 768, "prompt_tokens": 128, "output_tokens": 512, "shared_prefix_tokens": 64}
+      ]
+    }
+  ]
+}
