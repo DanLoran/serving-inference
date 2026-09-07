@@ -72,6 +72,17 @@ def small_bank_config(nonce_base=0):
 
 
 class CacheCampaignTest(unittest.TestCase):
+    def test_status_field_can_be_updated_atomically(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "status.json"
+            state = {"status": "starting"}
+            run_cache_campaign.update_status(
+                path, state, status="running", stage="conditions"
+            )
+            self.assertEqual(state["status"], "running")
+            self.assertEqual(state["stage"], "conditions")
+            self.assertEqual(json.loads(path.read_text()), state)
+
     def test_server_environment_discovers_pip_cuda_runtime(self):
         with tempfile.TemporaryDirectory() as directory:
             virtual_environment = Path(directory) / ".venv"
