@@ -935,10 +935,10 @@ def initial_status(config, plan):
     }
 
 
-def update_status(path, status, **changes):
-    status.update(changes)
-    status["updated_at_utc"] = utc_now()
-    atomic_write_json(path, status)
+def update_status(path, campaign_status, **changes):
+    campaign_status.update(changes)
+    campaign_status["updated_at_utc"] = utc_now()
+    atomic_write_json(path, campaign_status)
 
 
 def write_once(path, value):
